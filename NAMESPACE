@@ -1,0 +1,5 @@
+import(methods, stats4)
+export(ea_count, ea_conc, ea_presence)
+
+exportClasses(ea)
+exportMethods(show, print)
