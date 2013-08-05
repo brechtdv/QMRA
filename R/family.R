@@ -66,7 +66,7 @@ function(x, q){
 }
 
 ## Poisson-Log Normal ------------------------------------------------------
-pln <-
+poislognorm <-
 function(x, q){
   ## integrand
   f <-
@@ -95,7 +95,7 @@ function(x, q){
   ## return family
   return(
     structure(
-      list(family = "pln",
+      list(family = "poislognorm",
            minloglik = minloglik,
            start = start,
            npar = npar),
@@ -104,7 +104,7 @@ function(x, q){
 }
 
 ## Poisson-Inverse Gaussian ------------------------------------------------
-pig <-
+poisinvgauss <-
 function(x, q){
   ## minus log likelihood function
   minloglik <-
@@ -128,7 +128,7 @@ function(x, q){
   ## return family
   return(
     structure(
-      list(family = "pig",
+      list(family = "poisinvgauss",
            minloglik = minloglik,
            start = start,
            npar = npar),
@@ -137,7 +137,7 @@ function(x, q){
 }
 
 ## Poisson-Generalized Inverse Gaussian ------------------------------------
-pgig <-
+poisgeninvgauss <-
 function(x, q){
   ## minus log likelihood function
   minloglik <-
@@ -159,7 +159,7 @@ function(x, q){
   ## return family
   return(
     structure(
-      list(family = "pgig",
+      list(family = "poisgeninvgauss",
            minloglik = minloglik,
            start = start,
            npar = npar),

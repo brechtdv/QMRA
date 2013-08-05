@@ -3,7 +3,7 @@
 ## COUNT DATA --------------------------------------------------------------
 ea_count <-
 function(x, q = 1, data,
-         family = c("poisson", "negbin", "pln", "pig", "pgig")){
+         family = c("poisson", "negbin", "poislognorm", "poisinvgauss", "poisgeninvgauss")){
 
   ## check data
   if (missing(data) || is.null(data)){
