@@ -1,5 +1,6 @@
 import(methods, stats4)
-export(ea_count, ea_conc, ea_presence)
+export(ea_count, ea_conc, ea_presence,
+       bea_count, bea_conc, bea_presence)
 
-exportClasses(ea)
+exportClasses(ea, bea)
 exportMethods(show, print)

@@ -3,14 +3,14 @@
 ## Poisson -----------------------------------------------------------------
 poisson <-
 function(x, q){
-  ## minus log likelihood function
+  ## minus log likelihood function (concentration)
   minloglik <-
     function(mu, x, q){
       lik <- (mu * q) ^ x * exp(-mu * q) / factorial(x)
       return(-sum(log(lik)))
     }
 
-  ## minus log likelihood function
+  ## minus log likelihood function (presence/absence)
   minloglik_bernoulli <-
     function(mu, x, q){
       lik <- (1 - exp(-mu * q)) ^ x * (exp(-mu * q)) ^ (1 - x)
@@ -23,6 +23,10 @@ function(x, q){
   ## number of parameters
   npar <- 1
 
+  ## Bayesian implementation
+  bayes <-
+    list(prior = "mu ~ dgamma(0.01, 0.01)")
+
   ## return family
   return(
     structure(
@@ -30,7 +34,8 @@ function(x, q){
            minloglik = minloglik,
            minloglik_bernoulli = minloglik_bernoulli,
            start = start,
-           npar = npar),
+           npar = npar,
+           bayes = bayes),
       class = "family")
   )
 }
@@ -54,13 +59,20 @@ function(x, q){
   ## number of parameters
   npar <- 2
 
+  ## Bayesian implementation
+  bayes <-
+    list(prior = c("mu ~ dgamma(shape, rate)",
+                   "shape ~ dgamma(0.01, 0.01)",
+                   "rate ~ dgamma(0.01, 0.01)"))
+
   ## return family
   return(
     structure(
       list(family = "negbin",
            minloglik = minloglik,
            start = start,
-           npar = npar),
+           npar = npar,
+           bayes = bayes),
       class = "family")
   )
 }
@@ -70,10 +82,10 @@ poislognorm <-
 function(x, q){
   ## integrand
   f <-
-    function(mu, .x, .q)
+    function(mu, .x, .q, .mu_log, .sd_log)
       ((mu * .q) ^ .x * exp(-mu * .q) / factorial(.x)) *
-      (1 / (mu * sd_log * sqrt(2 * pi))) *
-      (exp(-(log(mu) - mu_log)^2 / (2 * sd_log ^ 2)))
+      (1 / (mu * .sd_log * sqrt(2 * pi))) *
+      (exp(-(log(mu) - .mu_log)^2 / (2 * .sd_log ^ 2)))
 
   ## minus log likelihood function
   minloglik <-
@@ -81,16 +93,24 @@ function(x, q){
       lik <- numeric(length(x))
       for (i in seq_along(x)){
         lik[i] <-
-          integrate(f, lower = 0, upper = Inf, .x = x[i], .q = q[i])$value
+          integrate(f, lower = 0, upper = Inf, .x = x[i], .q = q[i],
+                    .mu_log = mu_log, .sd_log = sd_log,
+                    stop.on.error = FALSE)$value
       }
       return(-sum(log(lik)))
     }
 
   ## starting values
-  start <- list(mu_log = 1, sd_log = 1)
+  start <- list(mu_log = 0, sd_log = 1)
 
   ## number of parameters
   npar <- 2
+
+  ## Bayesian implementation
+  bayes <-
+    list(prior = c("mu ~ dlnorm(mu_log, tau_log)",
+                   "mu_log ~ dnorm(0, 0.0001)",
+                   "tau_log ~ dgamma(0.01, 0.01)"))
 
   ## return family
   return(
@@ -98,7 +118,8 @@ function(x, q){
       list(family = "poislognorm",
            minloglik = minloglik,
            start = start,
-           npar = npar),
+           npar = npar,
+           bayes = bayes),
       class = "family")
   )
 }

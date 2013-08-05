@@ -8,6 +8,19 @@ setClass("ea",
     AIC = "numeric"),
   contains = "mle")
 
+setOldClass("JAGS_model") # virtual S3 class
+setOldClass("mcmc.list") # virtual S3 class
+
+setClass("bea",
+  representation(
+    call = "language",
+    data = "data.frame",
+    family = "function",
+    par = "list",
+    model = "JAGS_model",
+    mcmc = "list",
+    diagnostics = "list"))
+
 ##= Define S4 methods =====================================================
 setMethod("initialize", "ea",
   function(.Object, call, data, family, estimates, AIC, mle, ...) {
@@ -49,6 +62,43 @@ setMethod("print", "ea",
     cat("\nCoefficients:\n")
     print(x@coef)
     cat("\nAIC:", x@AIC)
+    cat("\n\n")
+  }
+)
+
+setMethod("show", "bea",
+  function(object)
+    print(object)
+)
+
+setMethod("print", "bea",
+  function(x, dig = 3, ...){
+    from <-
+      c("count", "concentration", "presence/absence")[
+        which(x@call[[1]] == c("bea_count", "bea_conc", "bea_presence"))]
+    cat("Bayesian exposure assessment from", from, "data\n\n")
+
+    cat("Call:\n")
+    print(x@call)
+
+    cat("\nEstimate:\n")
+    est <-
+      data.frame(mean(unlist(x@mcmc), na.rm = TRUE),
+                 quantile(unlist(x@mcmc), .025, na.rm = TRUE),
+                 quantile(unlist(x@mcmc), .975, na.rm = TRUE))
+    colnames(est) <- c("mean", "2.5%", "97.5%")
+    rownames(est) <- "mu"
+    print(est, digits = dig, ...)
+
+    cat("\nDeviance Information Criterion:\n")
+    print(x@diagnostics$DIC)
+
+    cat("\nBGR statistic: ",
+        formatC(x@diagnostics$BGR[, 1], digits = dig, format = "f"),
+        " (upperCL ",
+        formatC(x@diagnostics$BGR[, 2], digits = dig, format = "f"),
+        ")", sep = "")
+    cat("\nBGR values significantly higher than one indicate lack of fit.")
     cat("\n\n")
   }
 )
