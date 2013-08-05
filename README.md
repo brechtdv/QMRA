@@ -1,6 +1,6 @@
 ## QMRA
 
-The QMRA package provides frequentist and Bayesian parametric models for exposure and dose-response assessment.
+The QMRA package provides Maximum-likelihood based and Bayesian parametric models for exposure and dose-response assessment.
 
 The easiest way to install the development version of the QMRA package is via the `devtools` package:
 
