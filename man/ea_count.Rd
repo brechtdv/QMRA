@@ -9,7 +9,7 @@ Parametric modelling of exposure concentration from count data.
 
 \usage{
 ea_count(x, q = 1, data,
-         family = c("poisson", "negbin", "pln", "pig", "pgig"))
+         family = c("poisson", "negbin", "poislognorm", "poisinvgauss", "poisgeninvgauss"))
 }
 
 \arguments{
@@ -21,7 +21,8 @@ ea_count(x, q = 1, data,
               environment from which \code{ea_count} is called.}
   \item{family}{A character string naming the family function;
                 should be one of \code{"poisson"}, \code{"negbin"},
-                \code{"pln"}, \code{"pig"}, \code{"pgig"}. See details below.}
+                \code{"poislognorm"}, \code{"poisinvgauss"},
+                \code{"poisgeninvgauss"}. See details below.}
 }
 
 \details{
@@ -30,18 +31,14 @@ ea_count(x, q = 1, data,
 \itemize{
   \item{\strong{Poisson:  }}{\code{family = "poisson"}}
   \item{\strong{Negative Binomial:  }}{\code{family = "negbin"}}
-  \item{\strong{Poisson-LogNormal:  }}{\code{family = "pln"}}
-  \item{\strong{Poisson-Inverse Gaussian:  }}{\code{family = "pig"}}
-  \item{\strong{Poisson-Generalized Inverse Gaussian:  }}{\code{family = "pgig"}}
+  \item{\strong{Poisson-LogNormal:  }}{\code{family = "poislognorm"}}
+  \item{\strong{Poisson-Inverse Gaussian:  }}{\code{family = "poisinvgauss"}}
+  \item{\strong{Poisson-Generalized Inverse Gaussian:  }}{\code{family = "poisgeninvgauss"}}
 }}
 
-\value{
-An object of class \link[QMRA:ea-class]{ea}.
-}
+\value{An object of class \code{"\linkS4class{ea}"}.}
 
-\author{
-\email{Brecht.Devleesschauwer@UGent.be}
-}
+\author{\email{Brecht.Devleesschauwer@UGent.be}}
 
 \references{
 \itemize{

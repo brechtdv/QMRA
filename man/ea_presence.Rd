@@ -34,13 +34,9 @@ ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   \item{\strong{Poisson:  }}{\code{family = "poisson"}}
 }}
 
-\value{
-An object of class \link[QMRA:ea-class]{ea}.
-}
+\value{An object of class \code{"\linkS4class{ea}"}.}
 
-\author{
-\email{Brecht.Devleesschauwer@UGent.be}
-}
+\author{\email{Brecht.Devleesschauwer@UGent.be}}
 
 \references{
 \itemize{

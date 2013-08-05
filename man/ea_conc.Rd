@@ -35,13 +35,9 @@ ea_conc(x, d, data,
   \item{\strong{Inverse Gaussian:  }}{\code{family = "invgauss"}}
 }}
 
-\value{
-An object of class \link[QMRA:ea-class]{ea}.
-}
+\value{An object of class \code{"\linkS4class{ea}"}.}
 
-\author{
-\email{Brecht.Devleesschauwer@UGent.be}
-}
+\author{\email{Brecht.Devleesschauwer@UGent.be}}
 
 \references{
 \itemize{
