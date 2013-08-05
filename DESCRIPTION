@@ -1,7 +1,7 @@
 Package: QMRA
 Type: Package
 Title: Parametric Models for Quantitative Microbial Risk Assessment
-Version: 0.0.2
+Version: 0.0.3
 Date: 2013-08-05
 Authors@R: c(person("Brecht", "Devleesschauwer",
              role = c("aut", "cre"), email = "Brecht.Devleesschauwer@UGent.be"),
@@ -12,7 +12,7 @@ Author: Brecht Devleesschauwer [aut, cre],
         Christel Faes [aut]
 Maintainer: Brecht Devleesschauwer <Brecht.Devleesschauwer@UGent.be>
 BugReports: https://github.com/brechtdv/QMRA/issues
-Description: Parametric models for exposure assessment and dose-response assessment in QMRA. IMPORTANT: the Bayesian models in the QMRA package call on JAGS (Just Another Gibbs Sampler), which therefore has to be available on the user's system. JAGS can be downloaded from http://mcmc-jags.sourceforge.net/
+Description: The QMRA package provideds Maximum-likelihood-based and Bayesian parametric models for exposure assessment and dose-response assessment. IMPORTANT: the Bayesian models in the QMRA package call on JAGS (Just Another Gibbs Sampler), which therefore has to be available on the user's system. JAGS can be downloaded from http://mcmc-jags.sourceforge.net/
 Depends: R (>= 3.0.0), rjags, coda, methods, stats4
 SystemRequirements: jags (>= 3.2.0)
 License: GPL (>= 2)
