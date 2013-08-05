@@ -15,8 +15,8 @@
   \tabular{ll}{
     Package: \tab QMRA\cr
     Type: \tab Package\cr
-    Version: \tab 0.0.1\cr
-    Date: \tab 2013-08-01\cr
+    Version: \tab 0.0.2\cr
+    Date: \tab 2013-08-05\cr
     Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
     Maintainer: \tab \email{Brecht.Devleesschauwer@UGent.be}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
