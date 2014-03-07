@@ -11,3 +11,21 @@ function(x, ...){
       spacer <- spacer + 1
   }
 }
+
+## Print model average
+print.avg <-
+function(x, ...) {
+  ## data type
+  from <-
+    c("count", "concentration", "presence/absence")[
+      which(x$fun == c("ea_count", "ea_conc", "ea_presence"))]
+  cat("Exposure assessment from", from, "data\n\n")
+
+  ## model estimates
+  cat("Individual model estimates:\n")
+  print(x$mod)
+
+  ## model estimates
+  cat("\nModel average:\n")
+  print(x$avg)
+}

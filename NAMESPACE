@@ -1,6 +1,7 @@
 import(methods, lme4, stats4, SuppDists, HyperbolicDist)
 export(ea_count, ea_conc, ea_presence,
-       bea_count, bea_conc, bea_presence)
+       bea_count, bea_conc, bea_presence,
+       avg, print.avg, print.JAGS_model)
 
 exportClasses(ea, bea)
 exportMethods(show, print, summarize, sim)
