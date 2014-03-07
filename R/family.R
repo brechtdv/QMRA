@@ -21,7 +21,7 @@ function(x, q){
   summarize <-
     function(mu){
       mean <- mu
-      return(data.frame(mean = mean,
+      return(data.frame(mean = mean, sd = 0,
                         check.names = FALSE, row.names = ""))
     }
 
