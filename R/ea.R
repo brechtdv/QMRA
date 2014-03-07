@@ -3,7 +3,8 @@
 ## COUNT DATA --------------------------------------------------------------
 ea_count <-
 function(x, q = 1, data,
-         family = c("poisson", "negbin", "poislognorm", "poisinvgauss", "poisgeninvgauss")){
+         family = c("poisson", "negbin", "poislognorm",
+                    "poisinvgauss", "poisgeninvgauss"), ...){
 
   ## check data
   if (missing(data) || is.null(data)){
@@ -22,23 +23,40 @@ function(x, q = 1, data,
 
   ## check family
   family <- match.arg(family)
-  family <- getFromNamespace(family, "QMRA")
 
-  ## get maximum likelihood estimate
-  MLE <-
-    mle(minuslogl = family()$minloglik,
-        start = family()$start,
-        fixed = list(x = x, q = q))
+  ## fit poisson-lognormal as generalized linear mixed model
+  if (family == "poislognorm") {
+    id <- seq_along(x)
+    fit_glmm <-
+      glmer(x ~ 1 + (1 | id), offset = log(q), family = stats::poisson, ...)
 
-  ## AIC = -2*logLik + 2*npar
-  AIC <- summary(MLE)@m2logL + 2 * family()$npar
+    MLE <- new("mle",
+               coef = c(mu_log = fit_glmm@beta, sd_log = fit_glmm@theta))
+    AIC <- AIC(fit_glmm)
+    lrt <- list()
+    family <- getFromNamespace(family, "QMRA")
 
-  ## Likelihood Ratio test
-  LL0 <- -logLik(MLE)
-  LL1 <- poisson()$minloglik(x / q, x = x, q = q)
-  LRT <- 2 * (LL0 - LL1)
-  p <- pchisq(LRT, length(x) - family()$npar, lower.tail = FALSE)
-  lrt <- list("LL0" = LL0, "LL1" = LL1, "LRT" = LRT, "p-chisq" = p)
+  ## fit other models via likelihood
+  } else {
+    ## obtain 'family()' function
+    family <- getFromNamespace(family, "QMRA")
+
+    ## get maximum likelihood estimate
+    MLE <-
+      mle(minuslogl = family()$minloglik,
+          start = family()$start,
+          fixed = list(x = x, q = q))
+
+    ## AIC = -2*logLik + 2*npar
+    AIC <- summary(MLE)@m2logL + 2 * family()$npar
+
+    ## Likelihood Ratio test
+    LL0 <- -logLik(MLE)
+    LL1 <- poisson()$minloglik(x / q, x = x, q = q)
+    LRT <- 2 * (LL0 - LL1)
+    p <- pchisq(LRT, length(x) - family()$npar, lower.tail = FALSE)
+    lrt <- list("LL0" = LL0, "LL1" = LL1, "LRT" = LRT, "p-chisq" = p)
+  }
 
   ## create 'ea' object
   ea_fit <-
