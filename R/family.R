@@ -17,6 +17,20 @@ function(x, q){
       return(-sum(log(lik)))
     }
 
+  ## summarizing function
+  summarize <-
+    function(mu){
+      mean <- mu
+      return(data.frame(mean = mean,
+                        check.names = FALSE, row.names = ""))
+    }
+
+  ## simulation function
+  sim <-
+    function(mu, n){
+      return(rep(mu, n))
+    }
+
   ## starting values
   start <- list(mu = 1)
 
@@ -33,6 +47,8 @@ function(x, q){
       list(family = "poisson",
            minloglik = minloglik,
            minloglik_bernoulli = minloglik_bernoulli,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar,
            bayes = bayes),
@@ -53,6 +69,25 @@ function(x, q){
       return(-sum(log(lik)))
     }
 
+  ## summarizing function
+  summarize <-
+    function(mu, k){
+      gamma_shape <- k
+      gamma_rate  <- k / mu
+      mean <- mu
+      sdev <- sqrt(gamma_shape / (gamma_rate ^ 2))
+      cnfi <- qgamma(c(0.025, 0.975), shape = gamma_shape, rate = gamma_rate)
+      return(data.frame(mean = mean, sd = sdev,
+                        "2.5%" = cnfi[1], "97.5%" = cnfi[2],
+                        check.names = FALSE, row.names = ""))
+    }
+
+  ## simulation function
+  sim <-
+    function(mu, k, n){
+      return(rgamma(n, shape = k, rate = k / mu))
+    }
+
   ## starting values
   start <- list(mu = 0.005, k = 2)
 
@@ -70,6 +105,8 @@ function(x, q){
     structure(
       list(family = "negbin",
            minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar,
            bayes = bayes),
@@ -80,25 +117,11 @@ function(x, q){
 ## Poisson-Log Normal ------------------------------------------------------
 poislognorm <-
 function(x, q){
-  ## integrand
-  f <-
-    function(mu, .x, .q, .mu_log, .sd_log)
-      ((mu * .q) ^ .x * exp(-mu * .q) / factorial(.x)) *
-      (1 / (mu * .sd_log * sqrt(2 * pi))) *
-      (exp(-(log(mu) - .mu_log)^2 / (2 * .sd_log ^ 2)))
+  ## summarizing function
+  summarize <- lognormal()$summarize
 
-  ## minus log likelihood function
-  minloglik <-
-    function(mu_log, sd_log, x, q){
-      lik <- numeric(length(x))
-      for (i in seq_along(x)){
-        lik[i] <-
-          integrate(f, lower = 0, upper = Inf, .x = x[i], .q = q[i],
-                    .mu_log = mu_log, .sd_log = sd_log,
-                    stop.on.error = FALSE)$value
-      }
-      return(-sum(log(lik)))
-    }
+  ## simulation function
+  sim <- lognormal()$sim
 
   ## starting values
   start <- list(mu_log = 0, sd_log = 1)
@@ -116,7 +139,8 @@ function(x, q){
   return(
     structure(
       list(family = "poislognorm",
-           minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar,
            bayes = bayes),
@@ -129,19 +153,25 @@ poisinvgauss <-
 function(x, q){
   ## minus log likelihood function
   minloglik <-
-    function(mu, phi, x, q){
+    function(mu, shape, x, q){
       lik <-
-        (exp(phi) / factorial(x)) *
+        (exp(shape) / factorial(x)) *
         ((mu * q) ^ x) *
-        ((phi * (phi + 2 * mu * q)) ^ (1 / 4)) *
-        ((phi / (phi + 2 * mu * q)) ^ (x / 2)) *
-        besselK(x = sqrt(phi * (phi + 2 * mu * q)), nu = x - 1 / 2) *
+        ((shape * (shape + 2 * mu * q)) ^ (1 / 4)) *
+        ((shape / (shape + 2 * mu * q)) ^ (x / 2)) *
+        besselK(x = sqrt(shape * (shape + 2 * mu * q)), nu = x - 1 / 2) *
         sqrt(2 / pi)
       return(-sum(log(lik)))
     }
 
+  ## summarizing function
+  summarize <- invgauss()$summarize
+
+  ## simulation function
+  sim <- invgauss()$sim
+
   ## starting values
-  start <- list(mu = 0.005, phi = 1)
+  start <- list(mu = 0.005, shape = 1)
 
   ## number of parameters
   npar <- 2
@@ -151,6 +181,8 @@ function(x, q){
     structure(
       list(family = "poisinvgauss",
            minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar),
       class = "family")
@@ -171,6 +203,30 @@ function(x, q){
       return(-sum(log(lik)))
     }
 
+  ## summarizing function
+  summarize <-
+    function(eta, omega, lambda){
+      Theta <- gigChangePars(4, 1, c(lambda, omega, eta))
+      a <- Theta[3]
+      b <- Theta[2]
+      p <- Theta[1]
+      mean <- sqrt(b) * besselK(sqrt(a * b), p + 1) /
+             (sqrt(a) * besselK(sqrt(a * b), p))
+      sdev <- sqrt((b / a) *
+                   (besselK(sqrt(a * b), p + 2) / besselK(sqrt(a * b), p) -
+                   (besselK(sqrt(a * b), p + 1) / besselK(sqrt(a * b), p)) ^ 2))
+      cnfi <- qgig(c(.025, .975), Theta)
+      return(data.frame(mean = mean, sd = sdev,
+                        "2.5%" = cnfi[1], "97.5%" = cnfi[2],
+                        check.names = FALSE, row.names = ""))
+    }
+
+  ## simulation function
+  sim <-
+    function(eta, omega, lambda, n){
+      return(rgig(n, gigChangePars(4, 1, c(lambda, omega, eta))))
+    }
+
   ## number of parameters
   npar <- 3
 
@@ -182,6 +238,8 @@ function(x, q){
     structure(
       list(family = "poisgeninvgauss",
            minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar),
       class = "family")
@@ -199,6 +257,23 @@ function(x, d){
       return(sum(-log(d1)) + sum(-log(d0)))
     }
 
+  ## summarizing function
+  summarize <-
+    function(shape, rate){
+      mean <- shape / rate
+      sdev <- sqrt(shape) / rate
+      cnfi <- qgamma(c(0.025, 0.975), shape, rate)
+      return(data.frame(mean = mean, sd = sdev,
+                        "2.5%" = cnfi[1], "97.5%" = cnfi[2],
+                        check.names = FALSE, row.names = ""))
+    }
+
+  ## simulation function
+  sim <-
+    function(shape, rate, n){
+      return(rgamma(n, shape, rate))
+    }
+
   ## number of parameters
   npar <- 2
 
@@ -210,6 +285,8 @@ function(x, d){
     structure(
       list(family = "gamma",
            minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar),
       class = "family")
@@ -227,6 +304,24 @@ function(x, d){
       return(sum(-log(d1)) + sum(-log(d0)))
     }
 
+  ## summarizing function
+  summarize <-
+    function(shape, scale){
+      mean <- scale * base::gamma(1 + 1/shape)
+      sdev <- scale * sqrt(base::gamma(1 + 2/shape) -
+                           base::gamma(1 + 1/shape)^2)
+      cnfi <- qweibull(c(0.025, 0.975), shape, scale)
+      return(data.frame(mean = mean, sd = sdev,
+                        "2.5%" = cnfi[1], "97.5%" = cnfi[2],
+                        check.names = FALSE, row.names = ""))
+    }
+
+  ## simulation function
+  sim <-
+    function(shape, scale, n){
+      return(rweibull(n, shape, scale))
+    }
+
   ## number of parameters
   npar <- 2
 
@@ -238,6 +333,8 @@ function(x, d){
     structure(
       list(family = "weibull",
            minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar),
       class = "family")
@@ -246,13 +343,30 @@ function(x, d){
 
 ## Log-Normal --------------------------------------------------------------
 lognormal <-
-function(x, d){
+function(x = 1, d){
   ## minus log likelihood function
   minloglik <-
     function(mu_log, sd_log, x, d){
       d1 <- plnorm(x[d == 1], meanlog = mu_log, sdlog = sd_log)  # cens
       d0 <- dlnorm(x[d == 0], meanlog = mu_log, sdlog = sd_log)  # obs
       return(sum(-log(d1)) + sum(-log(d0)))
+    }
+
+  ## summarizing function
+  summarize <-
+    function(mu_log, sd_log){
+      mean <- exp(mu_log + sd_log^2 / 2)
+      sdev <- sqrt((exp(sd_log^2) - 1) * exp(2 * mu_log + sd_log^2))
+      cnfi <- qlnorm(c(0.025, 0.975), mu_log, sd_log)
+      return(data.frame(mean = mean, sd = sdev,
+                        "2.5%" = cnfi[1], "97.5%" = cnfi[2],
+                        check.names = FALSE, row.names = ""))
+    }
+
+  ## simulation function
+  sim <-
+    function(mu_log, sd_log, n){
+      return(rlnorm(n, mu_log, sd_log))
     }
 
   ## number of parameters
@@ -266,6 +380,8 @@ function(x, d){
     structure(
       list(family = "lognormal",
            minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar),
       class = "family")
@@ -288,6 +404,23 @@ function(x, d){
       return(sum(-log(d1)) + sum(-log(d0)))
     }
 
+  ## summarizing function
+  summarize <-
+    function(mu, shape){
+      mean <- mu
+      sdev <- sqrt(mu^3 / shape)
+      cnfi <- qinvGauss(c(0.025, 0.975), mu, shape)
+      return(data.frame(mean = mean, sd = sdev,
+                        "2.5%" = cnfi[1], "97.5%" = cnfi[2],
+                        check.names = FALSE, row.names = ""))
+    }
+
+  ## simulation function
+  sim <-
+    function(mu, shape, n){
+      return(rinvGauss(n, mu, shape))
+    }
+
   ## number of parameters
   npar <- 2
 
@@ -299,6 +432,8 @@ function(x, d){
     structure(
       list(family = "invgauss",
            minloglik = minloglik,
+           summarize = summarize,
+           sim = sim,
            start = start,
            npar = npar),
       class = "family")
