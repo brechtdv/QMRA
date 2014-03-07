@@ -48,19 +48,41 @@ setMethod("initialize", "ea",
 
 setMethod("show", "ea",
   function(object)
-    print(object)
+    getMethod("print", "ea")(object)
 )
 
 setMethod("print", "ea",
-  function(x, dig = 3, ...){
+  function(x, dig = 3, ...) {
+    ## data type
     from <-
       c("count", "concentration", "presence/absence")[
         which(x@call[[1]] == c("ea_count", "ea_conc", "ea_presence"))]
     cat("Exposure assessment from", from, "data\n\n")
+
+    ## function call
     cat("Call:\n")
     print(x@call)
-    cat("\nCoefficients:\n")
+
+    ## model family & estimates
+    family <-
+      switch(x@family()$family,
+             gamma = "Gamma",
+             lognormal = "Log-normal",
+             weibull = "Weibull",
+             invgaus = "Inverse Gaussian",
+             poisson = "Poisson",
+             negbin = "Negative Binomial",
+             poislognorm = "Poisson-Log-Normal",
+             poisinvgauss = "Poisson-Inverse Gaussian",
+             poisgeninvgauss = "Poisson-Generalised Inverse Gaussian")
+    cat("\n", family, " model coefficients:\n", sep = "")
     print(x@coef)
+
+    ## estimates
+    cat("\nEstimated concentration:\n")
+    print(summarize(x))
+
+    ## AIC
     cat("\nAIC:", x@AIC)
     cat("\n\n")
   }
@@ -68,11 +90,11 @@ setMethod("print", "ea",
 
 setMethod("show", "bea",
   function(object)
-    print(object)
+    getMethod("print", "bea")(object)
 )
 
 setMethod("print", "bea",
-  function(x, dig = 3, ...){
+  function(x, dig = 3, ...) {
     from <-
       c("count", "concentration", "presence/absence")[
         which(x@call[[1]] == c("bea_count", "bea_conc", "bea_presence"))]
@@ -100,5 +122,29 @@ setMethod("print", "bea",
         ")", sep = "")
     cat("\nBGR values significantly higher than one indicate lack of fit.")
     cat("\n\n")
+  }
+)
+
+setGeneric("summarize",
+  function(x, ...) {
+    standardGeneric("summarize")
+  }
+)
+
+setMethod("summarize", "ea",
+  function(x, ...) {
+    do.call(x@family()$summarize, as.list(x@coef))
+  }
+)
+
+setGeneric("sim",
+  function(x, n, ...) {
+    standardGeneric("sim")
+  }
+)
+
+setMethod("sim", "ea",
+  function(x, n, ...) {
+    do.call(x@family()$sim, c(as.list(x@coef), n))
   }
 )
