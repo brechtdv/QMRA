@@ -103,13 +103,8 @@ setMethod("print", "bea",
     cat("Call:\n")
     print(x@call)
 
-    cat("\nEstimate:\n")
-    est <-
-      data.frame(mean(unlist(x@mcmc), na.rm = TRUE),
-                 quantile(unlist(x@mcmc), .025, na.rm = TRUE),
-                 quantile(unlist(x@mcmc), .975, na.rm = TRUE))
-    colnames(est) <- c("mean", "2.5%", "97.5%")
-    rownames(est) <- "mu"
+    cat("\nEstimated concentration:\n")
+    est <- summarize(x)
     print(est, digits = dig, ...)
 
     cat("\nDeviance Information Criterion:\n")
@@ -137,6 +132,18 @@ setMethod("summarize", "ea",
   }
 )
 
+setMethod("summarize", "bea",
+  function(x, ...) {
+    posterior <- unlist(x@mcmc)
+    return(data.frame(mean = mean(posterior),
+                      sd   = sd(posterior),
+                      "2.5%"  = quantile(posterior, .025),
+                      "97.5%" = quantile(posterior, .975),
+                      check.names = FALSE,
+                      row.names = ""))
+  }
+)
+
 setGeneric("sim",
   function(x, n, ...) {
     standardGeneric("sim")
@@ -146,5 +153,11 @@ setGeneric("sim",
 setMethod("sim", "ea",
   function(x, n, ...) {
     do.call(x@family()$sim, c(as.list(x@coef), n))
+  }
+)
+
+setMethod("sim", "bea",
+  function(x, n, ...) {
+    sample(unlist(x@mcmc), n, replace = TRUE)
   }
 )
