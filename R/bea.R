@@ -3,15 +3,14 @@
 ## COUNT DATA --------------------------------------------------------------
 bea_count <-
 function(x, q = 1, data,
-         family = c("poisson", "negbin", "poislognorm",
-                    "poisinvgauss", "poisgeninvgauss"),
-         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE){
+         family = c("poisson", "negbin", "poislognorm", "poisweibull"),
+         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE) {
 
   ## check data
-  if (missing(data) || is.null(data)){
+  if (missing(data) || is.null(data)) {
     data <- parent.frame()
 
-  } else if (!is.data.frame(data)){
+  } else if (!is.data.frame(data)) {
     data <- data.frame(data)
   }
 
@@ -29,10 +28,12 @@ function(x, q = 1, data,
   ## create Bayesian model
   model <-
     c("model {",
-      "for (i in 1:N){",
+      "for (i in 1:N) {",
       "x[i] ~ dpois(lambda[i])",
       "lambda[i] <- mu * q[i]",
       "}",
+      ifelse(is.null(family()$bayes$likelihood),
+             "", paste("mu ~", family()$bayes$likelihood)),
       family()$bayes$prior,
       "}")
 
@@ -40,7 +41,7 @@ function(x, q = 1, data,
   class(model) <- "JAGS_model"
 
   ## create data
-  data <- list(x = x, q = q, N = length(x))
+  data <- list(N = length(x), x = x, q = q)
 
   ## generate inits
   inits <- NULL
@@ -63,7 +64,7 @@ function(x, q = 1, data,
   bea_fit <-
     new("bea",
         call = call,
-        data = data.frame(x = x, q = q),
+        data = as.data.frame(data[-1]),
         family = family,
         par = list(nchains = nchains, burnin = burnin,
                    update = update, inits = inits),
@@ -80,13 +81,14 @@ function(x, q = 1, data,
 ## CONCENTRATION DATA ------------------------------------------------------
 bea_conc <-
 function(x, d, data,
-         family = c("gamma", "lognormal", "weibull", "invgauss")){
+         family = c("gamma", "lognormal", "weibull", "invgauss"),
+         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE) {
 
   ## check data
-  if (missing(data) || is.null(data)){
+  if (missing(data) || is.null(data)) {
     data <- parent.frame()
 
-  } else if (!is.data.frame(data)){
+  } else if (!is.data.frame(data)) {
     data <- data.frame(data)
   }
 
@@ -97,6 +99,16 @@ function(x, d, data,
   x <- eval(call_x, data, enclos = parent.frame())
   d <- eval(call_d, data, enclos = parent.frame())
 
+  ## redefine 'd' -> 0 == left-censored, 1 == observed
+  d <- 1 - d
+
+  ## define 'lod' -> 'lod' of observations must be < observation
+  lod <- x
+  lod[d == 1] <- 0
+
+  ## redefine 'x' -> left-censored observations must be 'NA'
+  x[d == 0] <- NA
+
   ## check family
   family <- match.arg(family)
   family <- getFromNamespace(family, "QMRA")
@@ -104,11 +116,11 @@ function(x, d, data,
   ## create Bayesian model
   model <-
     c("model {",
-      "for (i in 1:N){",
-      "x[i] ~ dbern(pi[i])",
-      "pi[i] <- 1 - exp(-lambda[i])",
-      family()$bayes$model,
+      "for (i in 1:N) {",
+      "d[i] ~ dinterval(x[i], lod[i])",
+      paste("x[i] ~", family()$bayes$likelihood),
       "}",
+      paste("mu ~", family()$bayes$likelihood),
       family()$bayes$prior,
       "}")
 
@@ -116,10 +128,14 @@ function(x, d, data,
   class(model) <- "JAGS_model"
 
   ## create data
-  data <- list(x = x, q = q, N = length(x))
+  data <- list(N = length(x), x = x, d = d, lod = lod)
 
   ## generate inits
-  inits <- NULL
+  ## left-censored observations must be initialized below 'lod'
+  ## + inits must be > 0, for log-normal model
+  x_init <- rep(NA, length(x))
+  x_init[d == 0] <- .Machine$double.eps
+  inits <- list(x = x_init)
 
   ## get results!
   if (verbose)
@@ -139,7 +155,7 @@ function(x, d, data,
   bea_fit <-
     new("bea",
         call = call,
-        data = data.frame(x = x, q = q),
+        data = as.data.frame(data[-1]),
         family = family,
         par = list(nchains = nchains, burnin = burnin,
                    update = update, inits = inits),
@@ -157,13 +173,13 @@ function(x, d, data,
 bea_presence <-
 function(x, q = 1, replicates = rep(1, length(x)), data,
          family = c("poisson"),
-         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE){
+         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE) {
 
   ## check data
-  if (missing(data) || is.null(data)){
+  if (missing(data) || is.null(data)) {
     data <- parent.frame()
 
-  } else if (!is.data.frame(data)){
+  } else if (!is.data.frame(data)) {
     data <- data.frame(data)
   }
 
@@ -190,11 +206,13 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
   ## create Bayesian model
   model <-
     c("model {",
-      "for (i in 1:N){",
+      "for (i in 1:N) {",
       "x[i] ~ dbern(pi[i])",
       "pi[i] <- 1 - exp(-lambda[i])",
       "lambda[i] <- mu * q[i]",
       "}",
+      ifelse(is.null(family()$bayes$likelihood),
+             "", paste("mu ~", family()$bayes$likelihood)),
       family()$bayes$prior,
       "}")
 
@@ -202,7 +220,7 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
   class(model) <- "JAGS_model"
 
   ## create data
-  data <- list(x = x, q = q, N = length(x))
+  data <- list(N = length(x), x = x, q = q)
 
   ## generate inits
   inits <- NULL
@@ -225,7 +243,7 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
   bea_fit <-
     new("bea",
         call = call,
-        data = data.frame(x = x, q = q),
+        data = as.data.frame(data[-1]),
         family = family,
         par = list(nchains = nchains, burnin = burnin,
                    update = update, inits = inits),
