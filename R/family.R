@@ -95,10 +95,7 @@ function(x, q){
   npar <- 2
 
   ## Bayesian implementation
-  bayes <-
-    list(prior = c("mu ~ dgamma(shape, rate)",
-                   "shape ~ dgamma(0.01, 0.01)",
-                   "rate ~ dgamma(0.01, 0.01)"))
+  bayes <- gamma()$bayes
 
   ## return family
   return(
@@ -130,10 +127,7 @@ function(x, q){
   npar <- 2
 
   ## Bayesian implementation
-  bayes <-
-    list(prior = c("mu ~ dlnorm(mu_log, tau_log)",
-                   "mu_log ~ dnorm(0, 0.0001)",
-                   "tau_log ~ dgamma(0.01, 0.01)"))
+  bayes <- lognormal()$bayes
 
   ## return family
   return(
@@ -143,6 +137,37 @@ function(x, q){
            sim = sim,
            start = start,
            npar = npar,
+           bayes = bayes),
+      class = "family")
+  )
+}
+
+## Poisson-Weibull ---------------------------------------------------------
+poisweibull <-
+function(x, q){
+  ## summarizing function
+  summarize <- weibull()$summarize
+
+  ## simulation function
+  sim <- weibull()$sim
+
+  ## starting values
+  #start <- list(mu_log = 0, sd_log = 1)
+
+  ## number of parameters
+  #npar <- 2
+
+  ## Bayesian implementation
+  bayes <- weibull()$bayes
+
+  ## return family
+  return(
+    structure(
+      list(family = "poisweibull",
+           summarize = summarize,
+           sim = sim,
+           #start = start,
+           #npar = npar,
            bayes = bayes),
       class = "family")
   )
@@ -280,6 +305,12 @@ function(x, d){
   ## starting values
   start <- list(shape = 1, rate = 1)
 
+  ## Bayesian implementation
+  bayes <-
+    list(prior = c("shape ~ dgamma(0.01, 0.01)",
+                   "rate ~ dgamma(0.01, 0.01)"),
+         likelihood = "dgamma(shape, rate)")
+
   ## return family
   return(
     structure(
@@ -288,7 +319,8 @@ function(x, d){
            summarize = summarize,
            sim = sim,
            start = start,
-           npar = npar),
+           npar = npar,
+           bayes = bayes),
       class = "family")
   )
 }
@@ -328,6 +360,12 @@ function(x, d){
   ## starting values
   start <- list(shape = 1, scale = 1)
 
+  ## Bayesian implementation
+  bayes <-
+    list(prior = c("shape ~ dgamma(0.01, 0.01)",
+                   "scale ~ dgamma(0.01, 0.01)"),
+         likelihood = "dweib(shape, scale)")
+
   ## return family
   return(
     structure(
@@ -336,7 +374,8 @@ function(x, d){
            summarize = summarize,
            sim = sim,
            start = start,
-           npar = npar),
+           npar = npar,
+           bayes = bayes),
       class = "family")
   )
 }
@@ -375,6 +414,12 @@ function(x = 1, d){
   ## starting values
   start <- list(mu_log = mean(log(x)), sd_log = sd(log(x)))
 
+  ## Bayesian implementation
+  bayes <-
+    list(prior = c("mu_log  ~ dnorm(0, 0.00001)",
+                   "tau_log ~ dgamma(0.01, 0.01)"),
+         likelihood = "dlnorm(mu_log, tau_log)")
+
   ## return family
   return(
     structure(
@@ -383,7 +428,8 @@ function(x = 1, d){
            summarize = summarize,
            sim = sim,
            start = start,
-           npar = npar),
+           npar = npar,
+           bayes = bayes),
       class = "family")
   )
 }
