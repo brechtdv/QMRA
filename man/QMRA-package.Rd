@@ -15,8 +15,8 @@
   \tabular{ll}{
     Package: \tab QMRA\cr
     Type: \tab Package\cr
-    Version: \tab 0.0.6\cr
-    Date: \tab 2014-03-07\cr
+    Version: \tab 0.0.7\cr
+    Date: \tab 2014-03-09\cr
     Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
     Maintainer: \tab \email{Brecht.Devleesschauwer@UGent.be}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
@@ -35,6 +35,8 @@ Available functions in the \pkg{QMRA} package:
 	\code{\link{bea_conc}} \tab Bayesian parametric modelling of exposure concentration from (possibly left-censored) concentration data.\cr
     \code{\link{bea_presence}} \tab Bayesian parametric modelling of exposure concentration from presence/absence data.\cr
     \code{\link{avg}} \tab Model averaging.\cr
+    \code{\link{sim}} \tab Simulate from fitted concentration distributions. Method for objects of class \code{"\linkS4class{ea}"} and \code{"\linkS4class{bea}"}.\cr
+    \code{\link{summarize}} \tab Summarize fitted concentration distributions. Method for objects of class \code{"\linkS4class{ea}"} and \code{"\linkS4class{bea}"}.\cr
   }
 }
 

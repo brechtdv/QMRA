@@ -1,8 +1,8 @@
 Package: QMRA
 Type: Package
 Title: Parametric Models for Quantitative Microbial Risk Assessment
-Version: 0.0.6
-Date: 2014-03-07
+Version: 0.0.7
+Date: 2014-03-09
 Authors@R: c(person("Brecht", "Devleesschauwer",
              role = c("aut", "cre"), email = "Brecht.Devleesschauwer@UGent.be"),
              person("Niko", "Speybroeck", role = "aut"),
