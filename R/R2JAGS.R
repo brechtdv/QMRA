@@ -1,41 +1,36 @@
 R2JAGS <-
 function(model, data, nchains, inits, burnin, nodes, update, verbose){
-  ## Disable JAGS progress bars
-  old.pb <- options("jags.pb")
-  on.exit(options(old.pb)) 
-  options(jags.pb = "none")
+  ## disable JAGS progress bars
+  if (!verbose) {  
+    old.pb <- options("jags.pb")
+    on.exit(options(old.pb)) 
+    options(jags.pb = "none")
+  }
 
-  ## Format model
+  ## format model
   wrap(model)
-  
-  ## Define inits
-  if (any(inits == "random"))
-    inits <- NULL
 
-  ## Define & Initialize model
+  ## define & initialize model
   mod <-
     jags.model(file = "modelTempFile.txt",
                data = data,
-               #inits = inits,
+               inits = inits,
                n.chains = nchains,
                n.adapt = 1000,
                quiet = !verbose)
 
-  ## Delete 'modelTempFile.txt'
+  ## delete 'modelTempFile.txt'
   unlink("modelTempFile.txt")
 
-  ## Burn-in
-  update(mod, n.iter = burnin, progress.bar = "none")
+  ## burn-in
+  update(mod, n.iter = burnin)
 
-  ## Samples
-  samples <-
-    coda.samples(mod, nodes, n.iter = update, thin = 1,
-                 progress.bar = "none")
+  ## samples
+  samples <- coda.samples(mod, nodes, n.iter = update, thin = 1)
 
   ## Deviance
   dic <-
-    dic.samples(mod, n.iter = update, thin = 1, type = "pD",
-                progress.bar = "none")
+    dic.samples(mod, n.iter = update, thin = 1, type = "pD")
 
   ## Return results
   return(list(mcmc.list = samples, dic = dic))
