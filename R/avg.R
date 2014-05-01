@@ -81,3 +81,45 @@ function(...) {
   ## return output
   return(out)
 }
+
+## DOSE-RESPONSE MODEL AVERAGING ----------------------------------------------
+avg_drm <-
+function(..., dose) {
+  ## group models
+  models <- list(...)
+
+  ## check if all elements are same class...
+
+  ## derive weights
+  aic <- sapply(models, function(x) x@AIC)
+  delta <- aic - min(aic)
+  wghts <- exp(-.5 * delta) / sum(exp(-.5 * delta))
+
+  ## derive mean and variance
+  p <- lapply(models, predict, dose)
+  m <- matrix(sapply(p, function(x) x[, 1]), ncol = length(models))
+  v <- matrix(sapply(p, function(x) x[, 2]) ^ 2, ncol = length(models))
+
+  ## calculate average mean and variance
+  m_avg <- numeric(length(dose))
+  s_avg <- numeric(length(dose))
+  for (i in seq_along(dose)) {
+    m_avg[i] <- sum(wghts * m[i, ])
+    s_avg[i] <- sum(wghts * sqrt(v[i, ] + (m[i, ] - m_avg[i]) ^ 2))
+  }
+
+  ## calculate lower and upper bound ~ logit transformation
+  cnfi <- logit_transformed_ci(m_avg, s_avg, 0.95)
+
+  ## define function output
+  out <-
+    list(mod = data.frame(AIC = aic, weight = wghts),
+         avg = data.frame(mean = m_avg, sd = s_avg,
+                          "2.5%" = cnfi[, 1], "97.5%" = cnfi[, 2],
+                          check.names = FALSE,
+                          row.names = paste0("dose", dose)))
+  class(out) <- "avg"
+
+  ## return output
+  return(out)
+}

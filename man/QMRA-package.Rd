@@ -15,18 +15,20 @@
   \tabular{ll}{
     Package: \tab QMRA\cr
     Type: \tab Package\cr
-    Version: \tab 0.0.7\cr
-    Date: \tab 2014-03-09\cr
+    Version: \tab 0.0.8\cr
+    Date: \tab 2014-05-01\cr
     Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
     Maintainer: \tab \email{Brecht.Devleesschauwer@UGent.be}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
-    Depends: \tab R (>= 3.0.0), rjags, coda, methods, lme4, stats4, SuppDists, HyperbolicDist\cr
+    Depends: \tab R (>= 3.0.0), rjags, coda, methods, lme4, stats4, MASS, SuppDists, HyperbolicDist\cr
     SystemRequirements: \tab jags (>= 3.2.0)\cr
     License: \tab GPL (>= 2)\cr
     LazyLoad: \tab yes\cr
 }
 
-Available functions in the \pkg{QMRA} package:
+Available functions in the \pkg{QMRA} package:\cr
+
+\emph{Exposure Assessment:}
   \tabular{ll}{
     \code{\link{ea_count}} \tab Maximum-likelihood-based parametric modelling of exposure concentration from count data.\cr
 	\code{\link{ea_conc}} \tab Maximum-likelihood-based parametric modelling of exposure concentration from (possibly left-censored) concentration data.\cr
@@ -37,6 +39,16 @@ Available functions in the \pkg{QMRA} package:
     \code{\link{avg}} \tab Model averaging.\cr
     \code{\link{sim}} \tab Simulate from fitted concentration distributions. Method for objects of class \code{"\linkS4class{ea}"} and \code{"\linkS4class{bea}"}.\cr
     \code{\link{summarize}} \tab Summarize fitted concentration distributions. Method for objects of class \code{"\linkS4class{ea}"} and \code{"\linkS4class{bea}"}.\cr
+  }
+
+\emph{Dose-Response Modelling:}
+  \tabular{ll}{
+    \code{\link{drm}} \tab Maximum-likelihood-based parametric modelling of dose-response data.\cr
+    \code{\link{bdrm}} \tab Bayesian parametric modelling of dose-response data.\cr
+    \code{\link{avg}} \tab Model averaging.\cr
+    \code{\link{predict}} \tab Predict from fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"}.\cr
+    \code{\link{sim}} \tab Simulate from fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"} and \code{"\linkS4class{bdrm}"}.\cr
+    \code{\link{summarize}} \tab Summarize fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"} and \code{"\linkS4class{bdrm}"}.\cr
   }
 }
 

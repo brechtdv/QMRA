@@ -8,7 +8,7 @@ citEntry(
              person("Christel", "Faes", role = "aut")),
   title = "QMRA: Quantitative Microbial Risk Assessment.",
   year = "2014",
-  note = "R package version 0.0.7",
+  note = "R package version 0.0.8",
   url = "http://cran.r-project.org/package=QMRA",
-  textVersion = "Brecht Devleesschauwer, Niko Speybroeck and Christel Faes (2014). QMRA: Quantitative Microbial Risk Assessment. R package version 0.0.7. http://cran.r-project.org/package=QMRA"
+  textVersion = "Brecht Devleesschauwer, Niko Speybroeck and Christel Faes (2014). QMRA: Quantitative Microbial Risk Assessment. R package version 0.0.8. http://cran.r-project.org/package=QMRA"
 )

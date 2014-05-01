@@ -1,7 +1,11 @@
 import(methods, lme4, stats4, SuppDists, HyperbolicDist)
+importFrom(MASS, mvrnorm)
+
 export(ea_count, ea_conc, ea_presence,
        bea_count, bea_conc, bea_presence,
-       avg, avg_bea, print.avg, print.JAGS_model)
+       drm, bdrm,
+       avg, avg_bea, avg_drm,
+       print.avg, print.JAGS_model)
 
-exportClasses(ea, bea)
-exportMethods(show, print, summarize, sim)
+exportClasses(ea, bea, drm)
+exportMethods(show, print, summarize, sim, predict)
