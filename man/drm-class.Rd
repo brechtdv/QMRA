@@ -21,6 +21,8 @@ Objects of class \code{"drm"} contain the following slots:
                         original input data}
     \item{\code{family}:}{Object of class \code{"function"};
                           distribution family used to fit the model}
+    \item{\code{gof}:}{Object of class \code{"gof"};
+                       Chi-square goodness of fit}
     \item{\code{AIC}:}{Object of class \code{"numeric"};
                        resulting model \code{\link{AIC}}}
     \item{\code{mle_call}:}{Object of class \code{"language"};
@@ -51,8 +53,8 @@ Class \code{"\linkS4class{mle}"}, directly.
 
 \section{Methods}{
   \describe{
-    \item{print}{\code{signature(x = "drm")}: ... }
-    \item{show}{\code{signature(object = "drm")}: ... }
+    \item{print}{\code{signature(x = "drm")}}
+    \item{show}{\code{signature(object = "drm")}}
   }
 }
 

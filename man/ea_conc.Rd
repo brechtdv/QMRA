@@ -10,7 +10,8 @@ concentration data.
 
 \usage{
 ea_conc(x, d, data,
-        family = c("gamma", "lognormal", "weibull", "invgauss"))
+        model = c("gamma", "lognormal", "weibull", "invgauss"),
+        \dots)
 }
 
 \arguments{
@@ -20,19 +21,18 @@ ea_conc(x, d, data,
   \item{data}{An optional data frame, containing the variables in the model.
               If not found in \code{data}, the variables are taken from the
               environment from which \code{ea_count} is called.}
-  \item{family}{A character string naming the family function;
-                should be one of \code{"gamma"}, \code{"lognormal"},
-                \code{"weibull"}, \code{"invgauss"}. See details below.}
+  \item{model}{A character string naming the concentration model. See details below.}
+  \item{\dots}{Arguments to be passed to \code{\link{mle}}}
 }
 
 \details{
   Distributions available:
 
 \itemize{
-  \item{\strong{Gamma:  }}{\code{family = "gamma"}}
-  \item{\strong{Log-Normal:  }}{\code{family = "lognormal"}}
-  \item{\strong{Weibull:  }}{\code{family = "weibull"}}
-  \item{\strong{Inverse Gaussian:  }}{\code{family = "invgauss"}}
+  \item{\strong{Gamma:  }}{\code{model = "gamma"}}
+  \item{\strong{Log-Normal:  }}{\code{model = "lognormal"}}
+  \item{\strong{Weibull:  }}{\code{model = "weibull"}}
+  \item{\strong{Inverse Gaussian:  }}{\code{model = "invgauss"}}
 }}
 
 \value{An object of class \code{"\linkS4class{ea}"}.}
@@ -51,9 +51,8 @@ ea_conc(x, d, data,
 \seealso{
   \code{\link{ea_count}}, for modelling exposure from count data\cr
   \code{\link{ea_presence}}, for modelling exposure from presence/absence data
-
 }
 
 \examples{
-ea_conc(x = x, d = d, data = giardia, family = "weibull")
+ea_conc(x = x, d = d, data = giardia, model = "weibull")
 }

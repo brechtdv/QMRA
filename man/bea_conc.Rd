@@ -10,8 +10,8 @@ Bayesian parametric modelling of exposure concentration from
 
 \usage{
 bea_conc(x, d, data,
-         family = c("gamma", "lognormal", "weibull", "invgauss"),
-         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE)
+         model = c("gamma", "lognormal", "weibull", "invgauss"),
+         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE)
 }
 
 \arguments{
@@ -20,13 +20,11 @@ bea_conc(x, d, data,
            not (0).}
   \item{data}{An optional data frame, containing the variables in the model.
               If not found in \code{data}, the variables are taken from the
-              environment from which \code{ea_count} is called.}
-  \item{family}{A character string naming the family function;
-                should be one of \code{"gamma"}, \code{"lognormal"},
-                \code{"weibull"}, \code{"invgauss"}. See details below.}
+              environment from which \code{bea_conc} is called.}
+  \item{model}{A character string naming the concentration model. See details below.}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
                  defaults to 2.}
-  \item{burnin}{Number of samples to discard as burn-in; defaults to 1000.}
+  \item{burnin}{Number of samples to discard as burn-in; defaults to 5000.}
   \item{update}{Number of samples to retain; defaults to 5000.}
   \item{verbose}{Should JAGS process info be printed to the R console?
                  defaults to \code{FALSE}.}
@@ -36,10 +34,10 @@ bea_conc(x, d, data,
   Distributions available:
 
 \itemize{
-  \item{\strong{Gamma:  }}{\code{family = "gamma"}}
-  \item{\strong{Log-Normal:  }}{\code{family = "lognormal"}}
-  \item{\strong{Weibull:  }}{\code{family = "weibull"}}
-  \item{\strong{Inverse Gaussian:  }}{\code{family = "invgauss"}}
+  \item{\strong{Gamma:  }}{\code{model = "gamma"} or \code{"g"}}
+  \item{\strong{Log-Normal:  }}{\code{model = "lognormal"} or \code{"ln"}}
+  \item{\strong{Weibull:  }}{\code{model = "weibull"} or \code{"w"}}
+  \item{\strong{Inverse Gaussian:  }}{\code{model = "invgauss"} or \code{"ig"}}
 }}
 
 \value{An object of class \code{"\linkS4class{bea}"}.}
@@ -62,5 +60,5 @@ bea_conc(x, d, data,
 }
 
 \examples{
-bea_conc(x = x, d = d, data = giardia, family = "weibull")
+bea_conc(x = x, d = d, data = giardia, model = "weibull")
 }

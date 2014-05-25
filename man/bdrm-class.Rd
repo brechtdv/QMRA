@@ -33,8 +33,8 @@ Objects of class \code{"bdrm"} contain the following slots:
 
 \section{Methods}{
   \describe{
-    \item{print}{\code{signature(x = "bdrm")}: ... }
-    \item{show}{\code{signature(object = "bdrm")}: ... }
+    \item{print}{\code{signature(x = "bdrm")}}
+    \item{show}{\code{signature(object = "bdrm")}}
   }
 }
 

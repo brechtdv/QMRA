@@ -9,8 +9,11 @@ Bayesian parametric modelling of exposure concentration from count data.
 
 \usage{
 bea_count(x, q = 1, data,
-          family = c("poisson", "negbin", "poislognorm", "poisinvgauss", "poisgeninvgauss"),
-          nchains = 2, burnin = 1000, update = 5000, verbose = FALSE)
+          model = c("poisson", "p",
+                    "negbin", "nb",
+                    "poislognorm", "pln",
+                    "poisweibull", "pw"),
+          nchains = 2, burnin = 5000, update = 5000, verbose = FALSE)
 }
 
 \arguments{
@@ -20,13 +23,10 @@ bea_count(x, q = 1, data,
   \item{data}{An optional data frame, containing the variables in the model.
               If not found in \code{data}, the variables are taken from the
               environment from which \code{ea_count} is called.}
-  \item{family}{A character string naming the family function;
-                should be one of \code{"poisson"}, \code{"negbin"},
-                \code{"poislognorm"}, \code{"poisinvgauss"},
-                \code{"poisgeninvgauss"}. See details below.}
+  \item{model}{A character string naming the count model to be fitted. See details below.}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
                  defaults to 2.}
-  \item{burnin}{Number of samples to discard as burn-in; defaults to 1000.}
+  \item{burnin}{Number of samples to discard as burn-in; defaults to 5000.}
   \item{update}{Number of samples to retain; defaults to 5000.}
   \item{verbose}{Should JAGS process info be printed to the R console?
                  defaults to \code{FALSE}.}
@@ -36,11 +36,10 @@ bea_count(x, q = 1, data,
   Distributions available:
 
 \itemize{
-  \item{\strong{Poisson:  }}{\code{family = "poisson"}}
-  \item{\strong{Negative Binomial:  }}{\code{family = "negbin"}}
-  \item{\strong{Poisson-LogNormal:  }}{\code{family = "poislognorm"}}
-  \item{\strong{Poisson-Inverse Gaussian:  }}{\code{family = "poisinvgauss"}}
-  \item{\strong{Poisson-Generalized Inverse Gaussian:  }}{\code{family = "poisgeninvgauss"}}
+  \item{\strong{Poisson:  }}{\code{model = "poisson"} or \code{"p"}}
+  \item{\strong{Negative Binomial:  }}{\code{model = "negbin"} or \code{"nb"}}
+  \item{\strong{Poisson-LogNormal:  }}{\code{model = "poislognorm"} or \code{"pln"}}
+  \item{\strong{Poisson-Weibull:  }}{\code{model = "poisweibull"} or \code{"pw"}}
 }}
 
 \value{An object of class \code{"\linkS4class{bea}"}.}
@@ -62,5 +61,6 @@ bea_count(x, q = 1, data,
 }
 
 \examples{
-bea_count(x = counts, q = volume, family = "negbin", data = crypto)
+## Bayesian exposure assessment from count data
+bea_count(x = counts, q = volume, model = "negbin", data = crypto)
 }

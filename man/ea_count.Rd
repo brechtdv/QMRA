@@ -9,7 +9,12 @@ Parametric modelling of exposure concentration from count data.
 
 \usage{
 ea_count(x, q = 1, data,
-         family = c("poisson", "negbin", "poislognorm", "poisinvgauss", "poisgeninvgauss"))
+         model = c("poisson", "p",
+                   "negbin", "nb",
+                   "poislognorm", "pln",
+                   "poisinvgauss", "pig",
+                   "poisgeninvgauss", "pgig"),
+         \dots)
 }
 
 \arguments{
@@ -17,23 +22,21 @@ ea_count(x, q = 1, data,
   \item{q}{The quantities (e.g., volumes, masses) in which the counts were
            observed; defaults to 1.}
   \item{data}{An optional data frame, containing the variables in the model.
-              If not found in \code{data}, the variables are taken from the
-              environment from which \code{ea_count} is called.}
-  \item{family}{A character string naming the family function;
-                should be one of \code{"poisson"}, \code{"negbin"},
-                \code{"poislognorm"}, \code{"poisinvgauss"},
-                \code{"poisgeninvgauss"}. See details below.}
+              If not found in \code{\link{data}}, the variables are taken from the
+              environment from which \code{\link{ea_count}} is called.}
+  \item{model}{A character string naming the count model. See details below.}
+  \item{\dots}{Arguments to be passed to \code{\link{mle}}}
 }
 
 \details{
   Distributions available:
 
 \itemize{
-  \item{\strong{Poisson:  }}{\code{family = "poisson"}}
-  \item{\strong{Negative Binomial:  }}{\code{family = "negbin"}}
-  \item{\strong{Poisson-LogNormal:  }}{\code{family = "poislognorm"}}
-  \item{\strong{Poisson-Inverse Gaussian:  }}{\code{family = "poisinvgauss"}}
-  \item{\strong{Poisson-Generalized Inverse Gaussian:  }}{\code{family = "poisgeninvgauss"}}
+  \item{\strong{Poisson:  }}{\code{model = "poisson"} or \code{"p"}}
+  \item{\strong{Negative Binomial:  }}{\code{model = "negbin"} or \code{"nb"}}
+  \item{\strong{Poisson-LogNormal:  }}{\code{model = "poislognorm"} or \code{"pln"}}
+  \item{\strong{Poisson-Inverse Gaussian:  }}{\code{model = "poisinvgauss"} or \code{"pig"}}
+  \item{\strong{Poisson-Generalized Inverse Gaussian:  }}{\code{model = "poisgeninvgauss"} or \code{"pgig"}}
 }}
 
 \value{An object of class \code{"\linkS4class{ea}"}.}
@@ -55,5 +58,5 @@ ea_count(x, q = 1, data,
 }
 
 \examples{
-ea_count(x = counts, q = volume, family = "negbin", data = crypto)
+ea_count(x = counts, q = volume, model = "negbin", data = crypto)
 }

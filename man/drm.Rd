@@ -25,7 +25,7 @@ drm(x, n, dose, data,
               If not found in \code{data}, the variables are taken from the
               environment from which \code{drm} is called.}
   \item{model}{A character string naming the dose-response model. See details below.}
-  \item{\dots}{Arguments to be passed to ?}
+  \item{\dots}{Arguments to be passed to \code{\link{mle}}.}
 }
 
 \details{
@@ -58,5 +58,5 @@ drm(x, n, dose, data,
 
 \examples{
 ## Fit Beta-Poisson dose-response model to Campylobacter dataset
-drm(x = infected, n = total, dose = dose, data = campy, family = "bp")
+drm(x = infected, n = total, dose = dose, data = campy, model = "bp")
 }

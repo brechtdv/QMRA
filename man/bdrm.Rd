@@ -24,7 +24,7 @@ bdrm(x, n, dose, data,
   \item{dose}{Vector of administered doses.}
   \item{data}{An optional data frame, containing the variables in the model.
               If not found in \code{data}, the variables are taken from the
-              environment from which \code{drm} is called.}
+              environment from which \code{bdrm} is called.}
   \item{model}{A character string naming the dose-response model. See details below.}
   \item{inits}{List of initial values.}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
@@ -65,5 +65,7 @@ bdrm(x, n, dose, data,
 
 \examples{
 ## Fit Beta-Poisson dose-response model to Campylobacter dataset
-bdrm(x = infected, n = total, dose = dose, data = campy, family = "bp")
+bdrm(x = infected, n = total, dose = dose,
+     data = campy, model = "bp",
+     inits = list(alpha = 1, beta = 1))
 }

@@ -10,8 +10,8 @@ presence/absence data.
 
 \usage{
 bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
-             family = c("poisson"),
-             nchains = 2, burnin = 1000, update = 5000, verbose = FALSE)
+             model = c("poisson"),
+             nchains = 2, burnin = 5000, update = 5000, verbose = FALSE)
 }
 
 \arguments{
@@ -24,12 +24,12 @@ bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   \item{data}{An optional data frame, containing the variables in the model.
               If not found in \code{data}, the variables are taken from the
               environment from which \code{ea_presence} is called.}
-  \item{family}{A character string naming the family function;
+  \item{model}{A character string naming the model to be fitted;
                 currently only \code{"poisson"} is supported.
                 See details below.}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
                  defaults to 2.}
-  \item{burnin}{Number of samples to discard as burn-in; defaults to 1000.}
+  \item{burnin}{Number of samples to discard as burn-in; defaults to 5000.}
   \item{update}{Number of samples to retain; defaults to 5000.}
   \item{verbose}{Should JAGS process info be printed to the R console?
                  defaults to \code{FALSE}.}
@@ -39,7 +39,7 @@ bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   Available distributions:
 
 \itemize{
-  \item{\strong{Poisson:  }}{\code{family = "poisson"}}
+  \item{\strong{Poisson:  }}{\code{model = "poisson"}}
 }}
 
 \value{An object of class \code{"\linkS4class{bea}"}.}
@@ -61,5 +61,6 @@ bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
 }
 
 \examples{
-bea_presence(x = positive, q = volume, rep = replicates, data = dilution)
+## Bayesian exposure assessment from presence/absence data
+bea_presence(x = positive, q = volume, rep = replicates, data = coliform)
 }

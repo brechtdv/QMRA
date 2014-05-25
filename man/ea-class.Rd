@@ -22,8 +22,8 @@ Objects of class \code{"ea"} contain the following slots:
                         original input data}
     \item{\code{family}:}{Object of class \code{"function"};
                           distribution family used to fit the model}
-    \item{\code{estimates}:}{Object of class \code{"list"};
-                             resulting model estimates}
+    \item{\code{gof}:}{Object of class \code{"gof"};
+                       Chi-square goodness of fit}
     \item{\code{AIC}:}{Object of class \code{"numeric"};
                        resulting model \code{\link{AIC}}}
     \item{\code{mle_call}:}{Object of class \code{"language"};
@@ -54,8 +54,8 @@ Class \code{"\linkS4class{mle}"}, directly.
 
 \section{Methods}{
   \describe{
-    \item{print}{\code{signature(x = "ea")}: ... }
-    \item{show}{\code{signature(object = "ea")}: ... }
+    \item{print}{\code{signature(x = "ea")}}
+    \item{show}{\code{signature(object = "ea")}}
   }
 }
 

@@ -9,7 +9,7 @@ Parametric modelling of exposure concentration from presence/absence data.
 
 \usage{
 ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
-            family = c("poisson"))
+            model = c("poisson"), \dots)
 }
 
 \arguments{
@@ -22,16 +22,17 @@ ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   \item{data}{An optional data frame, containing the variables in the model.
               If not found in \code{data}, the variables are taken from the
               environment from which \code{ea_presence} is called.}
-  \item{family}{A character string naming the family function;
+  \item{model}{A character string naming the model to be fitted;
                 currently only \code{"poisson"} is supported.
                 See details below.}
+  \item{\dots}{Arguments to be passed to \code{\link{mle}}}
 }
 
 \details{
   Available distributions:
 
 \itemize{
-  \item{\strong{Poisson:  }}{\code{family = "poisson"}}
+  \item{\strong{Poisson:  }}{\code{model = "poisson"}}
 }}
 
 \value{An object of class \code{"\linkS4class{ea}"}.}
@@ -53,5 +54,6 @@ ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
 }
 
 \examples{
-ea_presence(x = positive, q = volume, rep = replicates, data = dilution)
+## exposure assessment from presence/absence data
+ea_presence(x = positive, q = volume, rep = replicates, data = coliform)
 }
