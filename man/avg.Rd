@@ -1,5 +1,7 @@
 \name{avg}
 \alias{avg}
+\alias{avg_ea}
+\alias{avg_drm}
 
 \title{Model averaging}
 
@@ -8,11 +10,13 @@ Average model estimates according to Akaike's Information Criterion.
 }
 
 \usage{
-avg(\dots)
+avg_ea(\dots)
+avg_drm(\dots, dose)
 }
 
 \arguments{
-  \item{\dots}{Possibly named objects of class \code{"\linkS4class{ea}"} or \code{"\linkS4class{bea}"}.}
+  \item{\dots}{Possibly named objects of class \code{"\linkS4class{ea}"} or \code{"\linkS4class{drm}"}.}
+  \item{dose}{Doses for which model-averaged responses need to be obtained.}
 }
 
 \details{
@@ -40,18 +44,32 @@ The variance of the averaged model estimate is given by
     \emph{Model Selection and Multimodel Inference.}
   Springer-Verlag New York, Inc.
 	}
+  \item{
+  Namata H, Aerts M, Faes C, Teunis P (2008). Model averaging in microbial risk assessment using fractional polynomials. \emph{Risk analysis}, 28(4), 891-905.
+  }
 }}
 
 \examples{
-## exposure assessment from concentration data
-gam <- ea_conc(x = x, d = d, data = giardia, family = "gamma")
-lno <- ea_conc(x = x, d = d, data = giardia, family = "lognormal")
-wei <- ea_conc(x = x, d = d, data = giardia, family = "weibull")
-inv <- ea_conc(x = x, d = d, data = giardia, family = "invgauss")
+## Exposure assessment from concentration data
+gam <- ea_conc(x = x, d = d, data = giardia, model = "gamma")
+lno <- ea_conc(x = x, d = d, data = giardia, model = "lognormal")
+wei <- ea_conc(x = x, d = d, data = giardia, model = "weibull")
+inv <- ea_conc(x = x, d = d, data = giardia, model = "invgauss")
 
-## model averaging
-avg("Gamma" = gam,
-    "Log-normal" = lno,
-    "Weibull" = wei,
-    "Inverse Gaussian" = inv)
+## Model averaging
+avg_ea("Gamma" = gam,
+       "Log-Normal" = lno,
+       "Weibull" = wei,
+       "Inverse Gaussian" = inv)
+
+
+## Fit several dose-response models to the Campylobacter dataset
+bp <- drm(infected, total, dose, campy, "betapoisson")
+ll <- drm(infected, total, dose, campy, "loglogistic")
+lp <- drm(infected, total, dose, campy, "logprobit")
+ev <- drm(infected, total, dose, campy, "extremevalue")
+
+## Model averaging
+avg_drm("bp" = bp, "ll" = ll, "lp" = lp, "ev" = ev,
+        dose = c(1, 10, 100))
 }
