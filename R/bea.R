@@ -3,8 +3,11 @@
 ## COUNT DATA --------------------------------------------------------------
 bea_count <-
 function(x, q = 1, data,
-         family = c("poisson", "negbin", "poislognorm", "poisweibull"),
-         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE) {
+         model = c("poisson", "p",
+                   "negbin", "nb",
+                   "poislognorm", "pln",
+                   "poisweibull", "pw"),
+         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE) {
 
   ## check data
   if (missing(data) || is.null(data)) {
@@ -21,9 +24,9 @@ function(x, q = 1, data,
   x <- eval(call_x, data, enclos = parent.frame())
   q <- eval(call_q, data, enclos = parent.frame())
 
-  ## check family
-  family <- match.arg(family)
-  family <- getFromNamespace(family, "QMRA")
+  ## check model
+  model <- match.arg(model)
+  family <- getFromNamespace(model, "QMRA")
 
   ## create Bayesian model
   model <-
@@ -81,8 +84,8 @@ function(x, q = 1, data,
 ## CONCENTRATION DATA ------------------------------------------------------
 bea_conc <-
 function(x, d, data,
-         family = c("gamma", "lognormal", "weibull", "invgauss"),
-         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE) {
+         model = c("gamma", "lognormal", "weibull", "invgauss"),
+         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE) {
 
   ## check data
   if (missing(data) || is.null(data)) {
@@ -109,9 +112,9 @@ function(x, d, data,
   ## redefine 'x' -> left-censored observations must be 'NA'
   x[d == 0] <- NA
 
-  ## check family
-  family <- match.arg(family)
-  family <- getFromNamespace(family, "QMRA")
+  ## check model
+  model <- match.arg(model)
+  family <- getFromNamespace(model, "QMRA")
 
   ## create Bayesian model
   model <-
@@ -172,8 +175,8 @@ function(x, d, data,
 ## PRESENCE/ABSENCE DATA ---------------------------------------------------
 bea_presence <-
 function(x, q = 1, replicates = rep(1, length(x)), data,
-         family = c("poisson"),
-         nchains = 2, burnin = 1000, update = 5000, verbose = FALSE) {
+         model = c("poisson"),
+         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE) {
 
   ## check data
   if (missing(data) || is.null(data)) {
@@ -199,9 +202,9 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
     q <- rep(q, r)
   }
 
-  ## check 'family'
-  family <- match.arg(family)
-  family <- getFromNamespace(family, "QMRA")
+  ## check model
+  model <- match.arg(model)
+  family <- getFromNamespace(model, "QMRA")
 
   ## create Bayesian model
   model <-
