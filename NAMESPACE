@@ -1,11 +1,13 @@
-import(methods, lme4, stats4, SuppDists, HyperbolicDist)
+import(methods, coda, rjags, lme4, stats4)
+importFrom(SuppDists, qinvGauss, rinvGauss)
+importFrom(HyperbolicDist, gigChangePars, qgig, rgig)
 importFrom(MASS, mvrnorm)
 
 export(ea_count, ea_conc, ea_presence,
        bea_count, bea_conc, bea_presence,
        drm, bdrm,
-       avg, avg_bea, avg_drm,
-       print.avg, print.JAGS_model)
+       avg_ea, avg_drm,
+       print.avg, print.JAGS_model, print.gof)
 
-exportClasses(ea, bea, drm)
-exportMethods(show, print, summarize, sim, predict)
+exportClasses(ea, bea, drm, bdrm)
+exportMethods(show, print, summarize, plot, sim, predict)
