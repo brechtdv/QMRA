@@ -7,16 +7,15 @@
 \title{Parametric Models for Quantitative Microbial Risk Assessment}
 
 \description{
-  The \pkg{QMRA} package provides Maximum-likelihood and Bayesian parametric
-  methods for exposure assessment and dose-response assessment.
+The \pkg{QMRA} package provides a suite of functions for fitting parametric models to exposure and dose-response data using Maximum Likelihood and Bayesian methods.
 }
 
 \details{
   \tabular{ll}{
     Package: \tab QMRA\cr
     Type: \tab Package\cr
-    Version: \tab 0.0.8\cr
-    Date: \tab 2014-05-01\cr
+    Version: \tab 0.0.10\cr
+    Date: \tab 2014-05-25\cr
     Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
     Maintainer: \tab \email{Brecht.Devleesschauwer@UGent.be}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
@@ -36,19 +35,27 @@ Available functions in the \pkg{QMRA} package:\cr
     \code{\link{bea_count}} \tab Bayesian parametric modelling of exposure concentration from count data.\cr
 	\code{\link{bea_conc}} \tab Bayesian parametric modelling of exposure concentration from (possibly left-censored) concentration data.\cr
     \code{\link{bea_presence}} \tab Bayesian parametric modelling of exposure concentration from presence/absence data.\cr
-    \code{\link{avg}} \tab Model averaging.\cr
+    \code{\link{avg_ea}} \tab Model averaging for objects of class \code{"\linkS4class{ea}"}.\cr
     \code{\link{sim}} \tab Simulate from fitted concentration distributions. Method for objects of class \code{"\linkS4class{ea}"} and \code{"\linkS4class{bea}"}.\cr
-    \code{\link{summarize}} \tab Summarize fitted concentration distributions. Method for objects of class \code{"\linkS4class{ea}"} and \code{"\linkS4class{bea}"}.\cr
-  }
+    \code{\link{summarize}} \tab Summarize fitted concentration distributions. Method for objects of class \code{"\linkS4class{ea}"} and \code{"\linkS4class{bea}"}.
+    }
 
 \emph{Dose-Response Modelling:}
   \tabular{ll}{
     \code{\link{drm}} \tab Maximum-likelihood-based parametric modelling of dose-response data.\cr
     \code{\link{bdrm}} \tab Bayesian parametric modelling of dose-response data.\cr
-    \code{\link{avg}} \tab Model averaging.\cr
+    \code{\link{avg_drm}} \tab Model averaging for objects of class \code{"\linkS4class{drm}"}.\cr
     \code{\link{predict}} \tab Predict from fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"}.\cr
     \code{\link{sim}} \tab Simulate from fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"} and \code{"\linkS4class{bdrm}"}.\cr
-    \code{\link{summarize}} \tab Summarize fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"} and \code{"\linkS4class{bdrm}"}.\cr
+    \code{\link{summarize}} \tab Summarize fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"} and \code{"\linkS4class{bdrm}"}.
+    }
+
+\emph{Datasets:}
+  \tabular{ll}{
+    \code{\link{crypto}}	\tab \emph{Cryptosporidium} oocyst counts.\cr
+    \code{\link{giardia}}	\tab \emph{Giardia} oocyst concentrations.\cr
+    \code{\link{coliform}}	\tab Coliform presence/absence data.\cr
+    \code{\link{campy}}		\tab \emph{Campylobacter} dose-response data.\cr
   }
 }
 
@@ -58,3 +65,4 @@ JAGS can be downloaded from \url{http://sourceforge.net/projects/mcmc-jags/}
 }
 
 \keyword{package}
+
