@@ -1,16 +1,21 @@
 ##= Define S4 classes =====================================================
-setOldClass("JAGS_model") # virtual S3 class
-setOldClass("mcmc.list") # virtual S3 class
 
+## first define some virtual S3 classes
+setOldClass("JAGS_model")
+setOldClass("mcmc.list")
+setOldClass("gof") 
+
+## 'ea': exposure assessment
 setClass("ea",
   representation(
     mle_call = "language",
     data = "data.frame",
     family = "function",
-    estimates = "list",
+    gof = "gof",
     AIC = "numeric"),
   contains = "mle")
 
+## 'bea': Bayesian exposure assessment
 setClass("bea",
   representation(
     call = "language",
@@ -21,14 +26,17 @@ setClass("bea",
     mcmc = "list",
     diagnostics = "list"))
 
+## 'drm': dose-response modelling
 setClass("drm",
   representation(
     mle_call = "language",
     data = "data.frame",
     family = "function",
-    AIC = "numeric"),
+    AIC = "numeric",
+    gof = "gof"),
   contains = "mle")
 
+## 'bdrm': Bayesian dose-response modelling
 setClass("bdrm",
   representation(
     call = "language",
@@ -41,13 +49,13 @@ setClass("bdrm",
 
 ##= Define S4 methods =====================================================
 setMethod("initialize", "ea",
-  function(.Object, call, data, family, estimates, AIC, mle, ...) {
+  function(.Object, call, data, family, gof, AIC, mle, ...) {
     .Object <- callNextMethod()
 
     .Object@call <- call
     .Object@data <- data
     .Object@family <- family
-    .Object@estimates <- estimates
+    .Object@gof <- gof
     .Object@AIC <- AIC
 
     .Object@mle_call  <- mle@call
@@ -65,13 +73,14 @@ setMethod("initialize", "ea",
 )
 
 setMethod("initialize", "drm",
-  function(.Object, call, data, family, AIC, mle, ...) {
+  function(.Object, call, data, family, AIC, gof, mle, ...) {
     .Object <- callNextMethod()
 
     .Object@call <- call
     .Object@data <- data
     .Object@family <- family
     .Object@AIC <- AIC
+    .Object@gof <- gof
 
     .Object@mle_call  <- mle@call
     .Object@coef      <- mle@coef
@@ -303,31 +312,42 @@ setMethod("sim", "bdrm",
 )
 
 setMethod("plot", "drm",
-  function(x, y, se = TRUE, add = FALSE,
+  function(x, y, se = TRUE, add = FALSE, n = NULL, min_log10dose = 0,
            xlab = "log10(dose)", ylab = "P(infection)",
            type = "l", lwd = 2, col = "red",
-           se_pars = list(type = "l", lty = 2, lwd = 2, col = "blue"), ...) {
+           se_pars = list(type = "l", lty = 2, lwd = 2, col = "blue"),
+           sim_pars = list(type = "l", lty = 1, col = rgb(0, 0, 0, 0.1)),
+           ...) {
     max_log10dose <- max(ceiling(log10(x@data$dose)))
-    d <- seq(0, max_log10dose, .1)
+    d <- seq(min_log10dose, max_log10dose, .1)
     p <- predict(x, 10^d)
 
     if (!add) {
       ## plot fitted dose-response curve
       plot(d, p[, 1],
-           ylim = c(0, 1), xlim = c(0, max_log10dose),
+           ylim = c(0, 1), xlim = c(min_log10dose, max_log10dose),
            xlab = xlab, ylab = ylab, 
            type = type, lwd = lwd, col = col, ...)
-
-      ## plot SE curves
-      do.call(matlines,
-              c(list(d, p[, 3:4]), se_pars))
 
       ## plot observations
       points(log10(x@data$dose), x@data$x / x@data$n,
              cex = log(x@data$n))
+
     } else {
       ## plot fitted dose-response curve
-      lines(d, p, type = type, ...)
+      lines(d, p[, 1], type = type, lwd = lwd, col = col, ...)
+    }
+
+    ## plot SE curves
+    if (se) {
+      do.call(matlines,
+              c(list(d, p[, 3:4]), se_pars))
+    }
+
+    ## plot simulated curves
+    if (!is.null(n)) {
+      do.call(matlines,
+              c(list(d, sim(x, n = n, dose = 10^d)), sim_pars))
     }
   }
 )
