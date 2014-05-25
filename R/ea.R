@@ -3,8 +3,11 @@
 ## COUNT DATA --------------------------------------------------------------
 ea_count <-
 function(x, q = 1, data,
-         family = c("poisson", "negbin", "poislognorm",
-                    "poisinvgauss", "poisgeninvgauss"), ...){
+         model = c("poisson", "p",
+                   "negbin", "nb",
+                   "poislognorm", "pln",
+                   "poisinvgauss", "pig",
+                   "poisgeninvgauss", "pgig"), ...){
 
   ## check data
   if (missing(data) || is.null(data)){
@@ -21,11 +24,17 @@ function(x, q = 1, data,
   x <- eval(call_x, data, enclos = parent.frame())
   q <- eval(call_q, data, enclos = parent.frame())
 
-  ## check family
-  family <- match.arg(family)
+  ## check model
+  model <- match.arg(model)
+  if (any(model == c("p", "nb", "pln", "pig", "pgig"))) {
+    model <-
+      c("poisson", "negbin", "poislognorm",
+        "poisinvgauss", "poisgeninvgauss")[
+        which(model == c("p", "nb", "pln", "pig", "pgig"))]
+  }
 
   ## fit poisson-lognormal as generalized linear mixed model
-  if (family == "poislognorm") {
+  if (model == "poislognorm") {
     id <- seq_along(x)
     fit_glmm <-
       glmer(x ~ 1 + (1 | id), offset = log(q), family = stats::poisson, ...)
@@ -33,29 +42,29 @@ function(x, q = 1, data,
     MLE <- new("mle",
                coef = c(mu_log = fit_glmm@beta, sd_log = fit_glmm@theta))
     AIC <- AIC(fit_glmm)
-    lrt <- list()
-    family <- getFromNamespace(family, "QMRA")
+    gof <- list()
+    class(gof) <- "gof"
+    family <- getFromNamespace(model, "QMRA")
 
   ## fit other models via likelihood
   } else {
     ## obtain 'family()' function
-    family <- getFromNamespace(family, "QMRA")
+    family <- getFromNamespace(model, "QMRA")
 
     ## get maximum likelihood estimate
     MLE <-
       mle(minuslogl = family()$minloglik,
           start = family()$start,
-          fixed = list(x = x, q = q))
+          fixed = list(x = x, q = q), ...)
 
     ## AIC = -2*logLik + 2*npar
     AIC <- summary(MLE)@m2logL + 2 * family()$npar
 
-    ## Likelihood Ratio test
-    LL0 <- -logLik(MLE)
-    LL1 <- poisson()$minloglik(x / q, x = x, q = q)
-    LRT <- 2 * (LL0 - LL1)
-    p <- pchisq(LRT, length(x) - family()$npar, lower.tail = FALSE)
-    lrt <- list("LL0" = LL0, "LL1" = LL1, "LRT" = LRT, "p-chisq" = p)
+    ## Chi-square goodness of fit
+    L0 <- exp(-poisson()$minloglik(x / q, x = x, q = q))
+    L1 <- exp(logLik(MLE))
+    gof <- list(L0 = c(L0, length(x)), L1 = c(L1, family()$npar))
+    class(gof) <- "gof"
   }
 
   ## create 'ea' object
@@ -64,7 +73,7 @@ function(x, q = 1, data,
         call = call,
         data = data.frame(x = x, q = q),
         family = family,
-        estimates = lrt,
+        gof = gof,
         AIC = AIC,
         mle = MLE)
 
@@ -75,7 +84,7 @@ function(x, q = 1, data,
 ## CONCENTRATION DATA ------------------------------------------------------
 ea_conc <-
 function(x, d, data,
-         family = c("gamma", "lognormal", "weibull", "invgauss")){
+         model = c("gamma", "lognormal", "weibull", "invgauss"), ...){
 
   ## check data
   if (missing(data) || is.null(data)){
@@ -92,18 +101,24 @@ function(x, d, data,
   x <- eval(call_x, data, enclos = parent.frame())
   d <- eval(call_d, data, enclos = parent.frame())
 
-  ## check family
-  family <- match.arg(family)
-  family <- getFromNamespace(family, "QMRA")
+  ## check model
+  model <- match.arg(model)
+  family <- getFromNamespace(model, "QMRA")
 
   ## get maximum likelihood estimate
   MLE <-
     mle(minuslogl = family(x, d)$minloglik,
         start = family(x, d)$start,
-        fixed = list(x = x, d = d))
+        fixed = list(x = x, d = d), ...)
 
   ## AIC = -2*logLik + 2*npar
   AIC <- summary(MLE)@m2logL + 2 * family(x, d)$npar
+
+  ## Chi-square goodness of fit
+  L0 <- NULL
+  L1 <- exp(logLik(MLE))
+  gof <- list(L0 = c(L0, length(x)), L1 = c(L1, family()$npar))
+  class(gof) <- "gof"
 
   ## create 'ea' object
   ea_fit <-
@@ -111,7 +126,7 @@ function(x, d, data,
         call = call,
         data = data.frame(x = x, d = d),
         family = family,
-        estimates = list(),
+        gof = gof,
         AIC = AIC,
         mle = MLE)
 
@@ -122,7 +137,7 @@ function(x, d, data,
 ## PRESENCE/ABSENCE DATA ---------------------------------------------------
 ea_presence <-
 function(x, q = 1, replicates = rep(1, length(x)), data,
-         family = c("poisson")){
+         model = c("poisson"), ...){
 
   ## check data
   if (missing(data) || is.null(data)){
@@ -149,17 +164,23 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
   }
 
   ## check 'family'
-  family <- match.arg(family)
-  family <- getFromNamespace(family, "QMRA")
+  model <- match.arg(model)
+  family <- getFromNamespace(model, "QMRA")
 
   ## get maximum likelihood estimate
   MLE <-
     mle(minuslogl = family()$minloglik_bernoulli,
         start = family()$start,
-        fixed = list(x = x, q = q))
+        fixed = list(x = x, q = q), ...)
 
   ## AIC = -2*logLik + 2*npar
   AIC <- summary(MLE)@m2logL + 2 * family()$npar
+
+  ## Chi-square goodness of fit
+  L0 <- exp(-poisson()$minloglik_bernoulli(x, x, q))
+  L1 <- exp(logLik(MLE))
+  gof <- list(L0 = c(L0, length(x)), L1 = c(L1, family()$npar))
+  class(gof) <- "gof"
 
   ## create 'ea' object
   ea_fit <-
@@ -167,7 +188,7 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
         call = call,
         data = data.frame(x = x, q = q),
         family = family,
-        estimates = list(),
+        gof = gof,
         AIC = AIC,
         mle = MLE)
 
