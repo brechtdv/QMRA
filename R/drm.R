@@ -40,10 +40,17 @@ function(x, n, dose, data,
   MLE <-
     mle(minuslogl = family()$minloglik,
         start = family()$start,
-        fixed = list(x = x, n = n, d = d))
+        fixed = list(x = x, n = n, d = d), ...)
 
   ## AIC = -2*logLik + 2*npar
   AIC <- summary(MLE)@m2logL + 2 * family()$npar
+
+  ## Chi-square goodness of fit
+  p0 <- x / n
+  L0 <- prod(p0 ^ x * (1 - p0) ^ (n - x))
+  L1 <- exp(summary(MLE)@m2logL / -2)
+  gof <- list(L0 = c(L0, length(x)), L1 = c(L1, family()$npar))
+  class(gof) <- "gof"
 
   ## create 'drm' object
   drm_fit <-
@@ -52,6 +59,7 @@ function(x, n, dose, data,
         data = data.frame(x = x, n = n, dose = d),
         family = family,
         AIC = AIC,
+        gof = gof,
         mle = MLE)
 
   ## return 'drm' object
