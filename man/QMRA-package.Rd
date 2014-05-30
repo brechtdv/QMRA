@@ -7,7 +7,7 @@
 \title{Parametric Models for Quantitative Microbial Risk Assessment}
 
 \description{
-The \pkg{QMRA} package provides a suite of functions for fitting parametric models to exposure and dose-response data using Maximum Likelihood and Bayesian methods.
+The \pkg{QMRA} package provides a suite of functions for performing exposure assessment, dose-response assessment and risk characterisation in the context of microbial risk assessment. Different parametric models are available and can be fitted in both a maximum likelihood and Bayesian framework.
 }
 
 \details{
@@ -29,9 +29,9 @@ Available functions in the \pkg{QMRA} package:\cr
 
 \emph{Exposure Assessment:}
   \tabular{ll}{
-    \code{\link{ea_count}} \tab Maximum-likelihood-based parametric modelling of exposure concentration from count data.\cr
-	\code{\link{ea_conc}} \tab Maximum-likelihood-based parametric modelling of exposure concentration from (possibly left-censored) concentration data.\cr
-    \code{\link{ea_presence}} \tab Maximum-likelihood-based parametric modelling of exposure concentration from presence/absence data.\cr
+    \code{\link{ea_count}} \tab ML parametric modelling of exposure concentration from count data. \cr
+	\code{\link{ea_conc}} \tab ML parametric modelling of exposure concentration from (possibly left-censored) concentration data.\cr
+    \code{\link{ea_presence}} \tab ML parametric modelling of exposure concentration from presence/absence data.\cr
     \code{\link{bea_count}} \tab Bayesian parametric modelling of exposure concentration from count data.\cr
 	\code{\link{bea_conc}} \tab Bayesian parametric modelling of exposure concentration from (possibly left-censored) concentration data.\cr
     \code{\link{bea_presence}} \tab Bayesian parametric modelling of exposure concentration from presence/absence data.\cr
@@ -42,7 +42,7 @@ Available functions in the \pkg{QMRA} package:\cr
 
 \emph{Dose-Response Modelling:}
   \tabular{ll}{
-    \code{\link{drm}} \tab Maximum-likelihood-based parametric modelling of dose-response data.\cr
+    \code{\link{drm}} \tab Maximum likelihood parametric modelling of dose-response data.\cr
     \code{\link{bdrm}} \tab Bayesian parametric modelling of dose-response data.\cr
     \code{\link{avg_drm}} \tab Model averaging for objects of class \code{"\linkS4class{drm}"}.\cr
     \code{\link{predict}} \tab Predict from fitted dose-response curve. Method for objects of class \code{"\linkS4class{drm}"}.\cr
