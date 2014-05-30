@@ -10,11 +10,12 @@ Print S3 objects of class \code{JAGS_model}, \code{avg} and \code{gof}.
 }
 
 \usage{
-print(x)
+print(x, \dots)
 }
 
 \arguments{
   \item{x}{Relevant S3 class object.}
+  \item{\dots}{Other arguments to be passed to \code{\link{print}}. Currently ignored.}
 }
 
 \author{\email{Brecht.Devleesschauwer@UGent.be}}
