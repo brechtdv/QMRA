@@ -7,7 +7,8 @@ function(x, q = 1, data,
                    "negbin", "nb",
                    "poislognorm", "pln",
                    "poisweibull", "pw"),
-         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE) {
+         inits = NULL, nchains = 2, burnin = 5000, update = 5000,
+         verbose = FALSE) {
 
   ## check data
   if (missing(data) || is.null(data)) {
@@ -24,8 +25,13 @@ function(x, q = 1, data,
   x <- eval(call_x, data, enclos = parent.frame())
   q <- eval(call_q, data, enclos = parent.frame())
 
-  ## check model
+  ## check 'model'
   model <- match.arg(model)
+  full <- c("poisson", "negbin", "poislognorm", "poisweibull")
+  short <- c("p", "nb", "pln", "pw")
+  if (model %in% short) model <- full[match(model, short)]
+
+  ## obtain 'family()' function
   family <- getFromNamespace(model, "QMRA")
 
   ## create Bayesian model
@@ -45,9 +51,6 @@ function(x, q = 1, data,
 
   ## create data
   data <- list(N = length(x), x = x, q = q)
-
-  ## generate inits
-  inits <- NULL
 
   ## get results!
   if (verbose)
@@ -84,8 +87,12 @@ function(x, q = 1, data,
 ## CONCENTRATION DATA ------------------------------------------------------
 bea_conc <-
 function(x, d, data,
-         model = c("gamma", "lognormal", "weibull", "invgauss"),
-         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE) {
+         model = c("gamma", "g",
+                   "lognorm", "ln",
+                   "weibull", "w",
+                   "invgauss", "ig"),
+         inits = NULL, nchains = 2, burnin = 5000, update = 5000,
+         verbose = FALSE) {
 
   ## check data
   if (missing(data) || is.null(data)) {
@@ -112,8 +119,13 @@ function(x, d, data,
   ## redefine 'x' -> left-censored observations must be 'NA'
   x[d == 0] <- NA
 
-  ## check model
+  ## check 'model'
   model <- match.arg(model)
+  full <- c("gamma", "lognorm", "weibull", "invgauss")
+  short <- c("g", "ln", "w", "ig")
+  if (model %in% short) model <- full[match(model, short)]
+
+  ## obtain 'family()' function
   family <- getFromNamespace(model, "QMRA")
 
   ## create Bayesian model
@@ -136,9 +148,11 @@ function(x, d, data,
   ## generate inits
   ## left-censored observations must be initialized below 'lod'
   ## + inits must be > 0, for log-normal model
-  x_init <- rep(NA, length(x))
-  x_init[d == 0] <- .Machine$double.eps
-  inits <- list(x = x_init)
+  if (is.null(inits)) {
+    x_init <- rep(NA, length(x))
+    x_init[d == 0] <- .Machine$double.eps
+    inits <- list(x = x_init)
+  }
 
   ## get results!
   if (verbose)
@@ -175,8 +189,9 @@ function(x, d, data,
 ## PRESENCE/ABSENCE DATA ---------------------------------------------------
 bea_presence <-
 function(x, q = 1, replicates = rep(1, length(x)), data,
-         model = c("poisson"),
-         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE) {
+         model = c("poisson", "p"),
+         inits = NULL, nchains = 2, burnin = 5000, update = 5000,
+         verbose = FALSE) {
 
   ## check data
   if (missing(data) || is.null(data)) {
@@ -202,8 +217,13 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
     q <- rep(q, r)
   }
 
-  ## check model
+  ## check 'model'
   model <- match.arg(model)
+  full <- c("poisson")
+  short <- c("p")
+  if (model %in% short) model <- full[match(model, short)]
+
+  ## obtain 'family()' function
   family <- getFromNamespace(model, "QMRA")
 
   ## create Bayesian model
@@ -224,9 +244,6 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
 
   ## create data
   data <- list(N = length(x), x = x, q = q)
-
-  ## generate inits
-  inits <- NULL
 
   ## get results!
   if (verbose)
