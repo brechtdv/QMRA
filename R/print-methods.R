@@ -37,18 +37,23 @@ function(x, ...) {
 ## Print Goodness of Fit
 print.gof <-
 function(x, ...) {
-  cat("Chi-square goodness of fit test\n\n")
-  cat("Saturated likelihood:",
-      x$L0[1], "on", x$L0[2], "degree(s) of freedom\n")
-  cat("    Model likelihood:",
-      x$L1[1], "on", x$L1[2], "degree(s) of freedom\n\n")
+  if (is.null(x)) {
+    cat("Goodness of fit statistics not yet implemented for this function.\n")
 
-  df <- x$L0[2] - x$L1[2]
-  chisq <- -2 * log(x$L1[1] / x$L0[1])
-  p     <- pchisq(chisq, df, lower.tail = FALSE)
+  } else {
+    cat("Chi-square goodness of fit test\n\n")
+    cat("Saturated likelihood:",
+        x$L0[1], "on", x$L0[2], "degree(s) of freedom\n")
+    cat("    Model likelihood:",
+        x$L1[1], "on", x$L1[2], "degree(s) of freedom\n\n")
 
-  out <- data.frame(chisq, df, p)
-  rownames(out) <- ""
-  colnames(out) <- c("ChiSq", "df", "Pr>ChiSq")
-  print(out)
+    df <- x$L0[2] - x$L1[2]
+    chisq <- -2 * log(x$L1[1] / x$L0[1])
+    p     <- pchisq(chisq, df, lower.tail = FALSE)
+
+    out <- data.frame(chisq, df, p)
+    rownames(out) <- ""
+    colnames(out) <- c("ChiSq", "df", "Pr>ChiSq")
+    print(out)
+  }
 }
