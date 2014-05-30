@@ -9,7 +9,7 @@ Parametric modelling of exposure concentration from presence/absence data.
 
 \usage{
 ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
-            model = c("poisson"), \dots)
+            model = c("poisson", "p"), \dots)
 }
 
 \arguments{
@@ -22,9 +22,7 @@ ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   \item{data}{An optional data frame, containing the variables in the model.
               If not found in \code{data}, the variables are taken from the
               environment from which \code{ea_presence} is called.}
-  \item{model}{A character string naming the model to be fitted;
-                currently only \code{"poisson"} is supported.
-                See details below.}
+  \item{model}{A character string naming the model to be fitted. See details below.}
   \item{\dots}{Arguments to be passed to \code{\link{mle}}}
 }
 
@@ -32,7 +30,7 @@ ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   Available distributions:
 
 \itemize{
-  \item{\strong{Poisson:  }}{\code{model = "poisson"}}
+  \item{\strong{Poisson:  }}{\code{model = "poisson"} or \code{"p"}}
 }}
 
 \value{An object of class \code{"\linkS4class{ea}"}.}

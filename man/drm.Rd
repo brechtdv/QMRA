@@ -9,11 +9,11 @@ Parametric modelling of dose-response data.
 
 \usage{
 drm(x, n, dose, data,
-    model = c("bp", "betapoisson",
-              "exp", "exponential",
-              "ll", "loglogistic",
-              "lp", "logprobit",
-              "ev", "extremevalue"),
+    model = c("betapoisson", "bp", 
+              "exponential", "exp", 
+              "loglogistic", "ll",
+              "logprobit", "lp",
+              "extremevalue", "ev"),
     ...)
 }
 

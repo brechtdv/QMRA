@@ -13,7 +13,8 @@ bea_count(x, q = 1, data,
                     "negbin", "nb",
                     "poislognorm", "pln",
                     "poisweibull", "pw"),
-          nchains = 2, burnin = 5000, update = 5000, verbose = FALSE)
+          inits = NULL, nchains = 2, burnin = 5000, update = 5000,
+          verbose = FALSE)
 }
 
 \arguments{
@@ -24,6 +25,7 @@ bea_count(x, q = 1, data,
               If not found in \code{data}, the variables are taken from the
               environment from which \code{ea_count} is called.}
   \item{model}{A character string naming the count model to be fitted. See details below.}
+  \item{inits}{Named list of initial values; defaults to \code{NULL}, leading \code{JAGS} to generate inits automatically (see \code{\link{jags.model}}).}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
                  defaults to 2.}
   \item{burnin}{Number of samples to discard as burn-in; defaults to 5000.}
@@ -62,5 +64,6 @@ bea_count(x, q = 1, data,
 
 \examples{
 ## Bayesian exposure assessment from count data
-bea_count(x = counts, q = volume, model = "negbin", data = crypto)
+bea_count(x = counts, q = volume, model = "negbin", data = crypto,
+          inits = list(shape = 1, rate = 1))
 }

@@ -10,8 +10,9 @@ presence/absence data.
 
 \usage{
 bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
-             model = c("poisson"),
-             nchains = 2, burnin = 5000, update = 5000, verbose = FALSE)
+             model = c("poisson", "p"),
+             inits = NULL, nchains = 2, burnin = 5000, update = 5000,
+             verbose = FALSE)
 }
 
 \arguments{
@@ -27,6 +28,7 @@ bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   \item{model}{A character string naming the model to be fitted;
                 currently only \code{"poisson"} is supported.
                 See details below.}
+  \item{inits}{Named list of initial values; defaults to \code{NULL}, leading \code{JAGS} to generate inits automatically (see \code{\link{jags.model}}).}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
                  defaults to 2.}
   \item{burnin}{Number of samples to discard as burn-in; defaults to 5000.}
@@ -39,7 +41,7 @@ bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
   Available distributions:
 
 \itemize{
-  \item{\strong{Poisson:  }}{\code{model = "poisson"}}
+  \item{\strong{Poisson:  }}{\code{model = "poisson"} or \code{"p"}}
 }}
 
 \value{An object of class \code{"\linkS4class{bea}"}.}

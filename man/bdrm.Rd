@@ -9,11 +9,11 @@ Bayesian parametric modelling of dose-response data.
 
 \usage{
 bdrm(x, n, dose, data,
-     model = c("bp", "betapoisson",
-               "exp", "exponential",
-               "ll", "loglogistic",
-               "lp", "logprobit",
-               "ev", "extremevalue"),
+     model = c("betapoisson", "bp", 
+               "exponential", "exp", 
+               "loglogistic", "ll",
+               "logprobit", "lp",
+               "extremevalue", "ev"),
      inits = NULL, nchains = 2, burnin = 10000, update = 10000,
      verbose = FALSE)
 }
@@ -26,7 +26,7 @@ bdrm(x, n, dose, data,
               If not found in \code{data}, the variables are taken from the
               environment from which \code{bdrm} is called.}
   \item{model}{A character string naming the dose-response model. See details below.}
-  \item{inits}{List of initial values.}
+  \item{inits}{Named list of initial values; defaults to \code{NULL}, leading \code{JAGS} to generate inits automatically (see \code{\link{jags.model}}).}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
                  defaults to 2.}
   \item{burnin}{Number of samples to discard as burn-in; defaults to 10000.}

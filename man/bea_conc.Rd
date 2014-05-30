@@ -10,8 +10,12 @@ Bayesian parametric modelling of exposure concentration from
 
 \usage{
 bea_conc(x, d, data,
-         model = c("gamma", "lognormal", "weibull", "invgauss"),
-         nchains = 2, burnin = 5000, update = 5000, verbose = FALSE)
+         model = c("gamma", "g",
+                   "lognorm", "ln",
+                   "weibull", "w",
+                   "invgauss", "ig"),
+         inits = NULL, nchains = 2, burnin = 5000, update = 5000,
+         verbose = FALSE)
 }
 
 \arguments{
@@ -22,6 +26,7 @@ bea_conc(x, d, data,
               If not found in \code{data}, the variables are taken from the
               environment from which \code{bea_conc} is called.}
   \item{model}{A character string naming the concentration model. See details below.}
+  \item{inits}{Named list of initial values; defaults to \code{NULL}, leading \code{JAGS} to generate inits automatically (see \code{\link{jags.model}}).}
   \item{nchains}{Number of model chains, should be \eqn{\ge 2};
                  defaults to 2.}
   \item{burnin}{Number of samples to discard as burn-in; defaults to 5000.}
@@ -35,7 +40,7 @@ bea_conc(x, d, data,
 
 \itemize{
   \item{\strong{Gamma:  }}{\code{model = "gamma"} or \code{"g"}}
-  \item{\strong{Log-Normal:  }}{\code{model = "lognormal"} or \code{"ln"}}
+  \item{\strong{Log-Normal:  }}{\code{model = "lognorm"} or \code{"ln"}}
   \item{\strong{Weibull:  }}{\code{model = "weibull"} or \code{"w"}}
   \item{\strong{Inverse Gaussian:  }}{\code{model = "invgauss"} or \code{"ig"}}
 }}

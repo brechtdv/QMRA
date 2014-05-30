@@ -2,9 +2,11 @@
 
 bdrm <-
 function(x, n, dose, data,
-         model = c("bp", "betapoisson", "exp", "exponential",
-                   "ll", "loglogistic", "lp", "logprobit",
-                   "ev", "extremevalue"),
+         model = c("betapoisson", "bp",
+                   "exponential", "exp",
+                   "loglogistic", "ll",
+                   "logprobit", "lp",
+                   "extremevalue", "ev"),
          inits = NULL, nchains = 2, burnin = 10000, update = 10000,
          verbose = FALSE) {
 
@@ -25,18 +27,15 @@ function(x, n, dose, data,
   n <- eval(call_n, data, enclos = parent.frame())
   d <- eval(call_d, data, enclos = parent.frame())
 
-  ## check model
+  ## check 'model'
   model <- match.arg(model)
-  if (any(model == c("bp", "exp", "ll", "lp", "ev"))) {
-    model <-
-      c("betapoisson", "exponential",
-        "loglogistic", "logprobit", "extremevalue")[
-        which(model == c("bp", "exp", "ll", "lp", "ev"))]
-  }
+  full <- c("betapoisson", "exponential",
+            "loglogistic", "logprobit", "extremevalue")
+  short <- c("bp", "exp", "ll", "lp", "ev")
+  if (model %in% short) model <- full[match(model, short)]
 
   ## obtain 'family()' function
-  family <- get(model)
-  #family <- getFromNamespace(model, "QMRA")
+  family <- getFromNamespace(model, "QMRA")
 
   ## create Bayesian model
   model <-

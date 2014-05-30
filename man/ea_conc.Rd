@@ -10,7 +10,10 @@ concentration data.
 
 \usage{
 ea_conc(x, d, data,
-        model = c("gamma", "lognormal", "weibull", "invgauss"),
+        model = c("gamma", "g",
+                  "lognorm", "ln",
+                  "weibull", "w",
+                  "invgauss", "ig"),
         \dots)
 }
 
@@ -29,10 +32,10 @@ ea_conc(x, d, data,
   Distributions available:
 
 \itemize{
-  \item{\strong{Gamma:  }}{\code{model = "gamma"}}
-  \item{\strong{Log-Normal:  }}{\code{model = "lognormal"}}
-  \item{\strong{Weibull:  }}{\code{model = "weibull"}}
-  \item{\strong{Inverse Gaussian:  }}{\code{model = "invgauss"}}
+  \item{\strong{Gamma:  }}{\code{model = "gamma"} or \code{"g"}}
+  \item{\strong{Log-Normal:  }}{\code{model = "lognorm"} or \code{"ln"}}
+  \item{\strong{Weibull:  }}{\code{model = "weibull"} or \code{"w"}}
+  \item{\strong{Inverse Gaussian:  }}{\code{model = "invgauss"} or \code{"ig"}}
 }}
 
 \value{An object of class \code{"\linkS4class{ea}"}.}

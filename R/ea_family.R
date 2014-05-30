@@ -381,7 +381,7 @@ function(x, d){
 }
 
 ## Log-Normal --------------------------------------------------------------
-lognormal <-
+lognorm <-
 function(x = 1, d){
   ## minus log likelihood function
   minloglik <-
@@ -423,7 +423,7 @@ function(x = 1, d){
   ## return family
   return(
     structure(
-      list(family = "lognormal",
+      list(family = "lognorm",
            minloglik = minloglik,
            summarize = summarize,
            sim = sim,
