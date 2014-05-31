@@ -37,7 +37,7 @@ function(x, ...) {
 ## Print Goodness of Fit
 print.gof <-
 function(x, ...) {
-  if (is.null(x)) {
+  if (is.na(x)) {
     cat("Goodness of fit statistics not yet implemented for this function.\n")
 
   } else {

@@ -121,7 +121,7 @@ function(x, d, data,
 
   ## Chi-square goodness of fit
   ## How to implement???
-  gof <- NULL
+  gof <- NA
   class(gof) <- "gof"
 
   ## create 'ea' object
