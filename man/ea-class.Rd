@@ -59,7 +59,7 @@ Class \code{"\linkS4class{mle}"}, directly.
   }
 }
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \seealso{
 \code{\link{ea_count}}, \code{\link{ea_conc}}, \code{\link{ea_presence}}\cr

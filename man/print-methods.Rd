@@ -18,4 +18,4 @@ print(x, \dots)
   \item{\dots}{Other arguments to be passed to \code{\link{print}}. Currently ignored.}
 }
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}

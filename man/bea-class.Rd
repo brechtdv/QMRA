@@ -40,7 +40,7 @@ Objects of class \code{"bea"} contain the following slots:
   }
 }
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \seealso{
 \code{\link{bea_count}}, \code{\link{bea_conc}}, \code{\link{bea_presence}}

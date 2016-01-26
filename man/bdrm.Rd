@@ -48,7 +48,7 @@ bdrm(x, n, dose, data,
 
 \value{An object of class \code{"\linkS4class{drm}"}.}
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \references{
 \itemize{

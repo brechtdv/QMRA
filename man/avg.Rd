@@ -30,7 +30,7 @@ The variance of the averaged model estimate is given by
 
 \value{An object of S3 class \code{"avg"}.}
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \references{
 \itemize{

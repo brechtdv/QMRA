@@ -46,7 +46,7 @@ bea_presence(x, q = 1, replicates = rep(1, length(x)), data,
 
 \value{An object of class \code{"\linkS4class{bea}"}.}
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \references{
 \itemize{

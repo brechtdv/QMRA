@@ -40,7 +40,7 @@ ea_conc(x, d, data,
 
 \value{An object of class \code{"\linkS4class{ea}"}.}
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \references{
 \itemize{

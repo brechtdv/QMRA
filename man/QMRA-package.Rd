@@ -17,7 +17,7 @@ The \pkg{QMRA} package provides a suite of functions for performing exposure ass
     Version: \tab 0.0.10\cr
     Date: \tab 2014-05-25\cr
     Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
-    Maintainer: \tab \email{Brecht.Devleesschauwer@UGent.be}\cr
+    Maintainer: \tab \email{brechtdv@gmail.com}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
     Depends: \tab R (>= 3.0.0), rjags, coda, methods, lme4, stats4, MASS, SuppDists, HyperbolicDist\cr
     SystemRequirements: \tab jags (>= 3.2.0)\cr

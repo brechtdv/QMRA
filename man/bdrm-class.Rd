@@ -38,6 +38,6 @@ Objects of class \code{"bdrm"} contain the following slots:
   }
 }
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \keyword{classes}

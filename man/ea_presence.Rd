@@ -35,7 +35,7 @@ ea_presence(x, q = 1, replicates = rep(1, length(x)), data,
 
 \value{An object of class \code{"\linkS4class{ea}"}.}
 
-\author{\email{Brecht.Devleesschauwer@UGent.be}}
+\author{\email{brechtdv@gmail.com}}
 
 \references{
 \itemize{
