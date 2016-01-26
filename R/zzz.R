@@ -12,7 +12,8 @@ setClass("ea",
     data = "data.frame",
     family = "function",
     gof = "gof",
-    AIC = "numeric"),
+    AIC = "numeric",
+    mle = "mle"),
   contains = "mle")
 
 ## 'bea': Bayesian exposure assessment
@@ -33,7 +34,8 @@ setClass("drm",
     data = "data.frame",
     family = "function",
     AIC = "numeric",
-    gof = "gof"),
+    gof = "gof",
+    mle = "mle"),
   contains = "mle")
 
 ## 'bdrm': Bayesian dose-response modelling
