@@ -3,12 +3,12 @@ citHeader("To cite the prevalence package in publications, please use:")
 citEntry(
   entry = "manual",
   author = c(person("Brecht", "Devleesschauwer",
-             role = c("aut", "cre"), email = "Brecht.Devleesschauwer@UGent.be"),
+             role = c("aut", "cre"), email = "brechtdv@gmail.com"),
              person("Niko", "Speybroeck", role = "aut"),
              person("Christel", "Faes", role = "aut")),
   title = "QMRA: Quantitative Microbial Risk Assessment.",
-  year = "2014",
-  note = "R package version 0.0.11",
-  url = "http://cran.r-project.org/package=QMRA",
-  textVersion = "Brecht Devleesschauwer, Niko Speybroeck and Christel Faes (2014). QMRA: Quantitative Microbial Risk Assessment. R package version 0.0.11. http://cran.r-project.org/package=QMRA"
+  year = "2016",
+  note = "R package version 0.0.12",
+  url = "https://github.com/brechtdv/QMRA",
+  textVersion = "Brecht Devleesschauwer, Niko Speybroeck and Christel Faes (2016). QMRA: Quantitative Microbial Risk Assessment. R package version 0.0.12. https://github.com/brechtdv/QMRA"
 )

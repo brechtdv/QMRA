@@ -14,8 +14,8 @@ The \pkg{QMRA} package provides a suite of functions for performing exposure ass
   \tabular{ll}{
     Package: \tab QMRA\cr
     Type: \tab Package\cr
-    Version: \tab 0.0.10\cr
-    Date: \tab 2014-05-25\cr
+    Version: \tab 0.0.12\cr
+    Date: \tab 2016-01-25\cr
     Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
     Maintainer: \tab \email{brechtdv@gmail.com}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
