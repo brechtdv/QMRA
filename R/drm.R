@@ -37,7 +37,8 @@ function(x, n, dose, data,
 
   ## define optimizer start values
   ## use default value if no value defined by user
-  if (missing(start)) {
+  start <- list(...)$start
+  if (is.null(start)) {
     start <- family()$start
   }
 
