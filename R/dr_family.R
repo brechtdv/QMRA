@@ -94,8 +94,8 @@ function(x, n, dose){
   minloglik <-
     function(theta, x, n, d){
       p <- 1 - exp(-d * theta)
-      loglik <- x * log(p) + (n - x) * log(1 - p)
-      return(-sum(loglik))
+      L <- dbinom(x = x, size = n, prob = p)
+      return(-sum(log(L)))
     }
 
   ## starting values
