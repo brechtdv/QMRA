@@ -50,10 +50,11 @@ function(x, q = 1, data,
   } else {
     ## define optimizer start value
     ## use default if no user-defined value
-    if (missing(start)) {
+    start <- list(...)$start
+    if (is.null(start)) {
       start <- family()$start
     }
-    
+  
     ## get maximum likelihood estimate
     MLE <-
       mle(minuslogl = family()$minloglik,
@@ -118,8 +119,9 @@ function(x, d, data,
 
   ## define optimizer start value
   ## use default if no user-defined value
-  if (missing(start)) {
-    start <- family(x, d)$start
+  start <- list(...)$start
+  if (is.null(start)) {
+    start <- family()$start
   }
     
   ## get maximum likelihood estimate
@@ -190,7 +192,8 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
 
   ## define optimizer start value
   ## use default if no user-defined value
-  if (missing(start)) {
+  start <- list(...)$start
+  if (is.null(start)) {
     start <- family()$start
   }
 
