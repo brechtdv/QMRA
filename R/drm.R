@@ -35,10 +35,16 @@ function(x, n, dose, data,
   ## obtain 'family()' function
   family <- getFromNamespace(model, "QMRA")
 
+  ## define optimizer start values
+  ## use default value if no value defined by user
+  if (missing(start)) {
+    start <- family()$start
+  }
+
   ## get maximum likelihood estimate
   MLE <-
     mle(minuslogl = family()$minloglik,
-        start = family()$start,
+        start = start,
         fixed = list(x = x, n = n, d = d), ...)
 
   ## AIC = -2*logLik + 2*npar
