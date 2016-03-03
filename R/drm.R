@@ -6,7 +6,8 @@ function(x, n, dose, data,
                    "exponential", "exp", 
                    "loglogistic", "ll",
                    "logprobit", "lp",
-                   "extremevalue", "ev"), ...){
+                   "extremevalue", "ev"),
+         start = NULL, ...) {
 
   ## check data
   if (missing(data) || is.null(data)){
@@ -37,7 +38,6 @@ function(x, n, dose, data,
 
   ## define optimizer start values
   ## use default value if no value defined by user
-  start <- list(...)$start
   if (is.null(start)) {
     start <- family()$start
   }
