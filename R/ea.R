@@ -48,10 +48,16 @@ function(x, q = 1, data,
 
   ## fit other models via likelihood
   } else {
+    ## define optimizer start value
+    ## use default if no user-defined value
+    if (missing(start)) {
+      start <- family()$start
+    }
+    
     ## get maximum likelihood estimate
     MLE <-
       mle(minuslogl = family()$minloglik,
-          start = family()$start,
+          start = start,
           fixed = list(x = x, q = q), ...)
 
     ## AIC = -2*logLik + 2*npar
@@ -110,10 +116,16 @@ function(x, d, data,
   ## obtain 'family()' function
   family <- getFromNamespace(model, "QMRA")
 
+  ## define optimizer start value
+  ## use default if no user-defined value
+  if (missing(start)) {
+    start <- family(x, d)$start
+  }
+    
   ## get maximum likelihood estimate
   MLE <-
     mle(minuslogl = family(x, d)$minloglik,
-        start = family(x, d)$start,
+        start = start,
         fixed = list(x = x, d = d), ...)
 
   ## AIC = -2*logLik + 2*npar
@@ -176,10 +188,16 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
   ## obtain 'family()' function
   family <- getFromNamespace(model, "QMRA")
 
+  ## define optimizer start value
+  ## use default if no user-defined value
+  if (missing(start)) {
+    start <- family()$start
+  }
+
   ## get maximum likelihood estimate
   MLE <-
     mle(minuslogl = family()$minloglik_bernoulli,
-        start = family()$start,
+        start = start,
         fixed = list(x = x, q = q), ...)
 
   ## AIC = -2*logLik + 2*npar
