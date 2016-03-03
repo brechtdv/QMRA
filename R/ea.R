@@ -7,7 +7,8 @@ function(x, q = 1, data,
                    "negbin", "nb",
                    "poislognorm", "pln",
                    "poisinvgauss", "pig",
-                   "poisgeninvgauss", "pgig"), ...){
+                   "poisgeninvgauss", "pgig"),
+         start = NULL, ...) {
 
   ## check data
   if (missing(data) || is.null(data)){
@@ -50,7 +51,6 @@ function(x, q = 1, data,
   } else {
     ## define optimizer start value
     ## use default if no user-defined value
-    start <- list(...)$start
     if (is.null(start)) {
       start <- family()$start
     }
@@ -119,7 +119,6 @@ function(x, d, data,
 
   ## define optimizer start value
   ## use default if no user-defined value
-  start <- list(...)$start
   if (is.null(start)) {
     start <- family()$start
   }
@@ -192,7 +191,6 @@ function(x, q = 1, replicates = rep(1, length(x)), data,
 
   ## define optimizer start value
   ## use default if no user-defined value
-  start <- list(...)$start
   if (is.null(start)) {
     start <- family()$start
   }
