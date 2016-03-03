@@ -14,13 +14,13 @@ The \pkg{QMRA} package provides a suite of functions for performing exposure ass
   \tabular{ll}{
     Package: \tab QMRA\cr
     Type: \tab Package\cr
-    Version: \tab 0.0.12\cr
-    Date: \tab 2016-01-25\cr
+    Version: \tab 0.0.13\cr
+    Date: \tab 2016-03-03\cr
     Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
     Maintainer: \tab \email{brechtdv@gmail.com}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
-    Depends: \tab R (>= 3.0.0), rjags, coda, methods, lme4, stats4, MASS, SuppDists, HyperbolicDist\cr
-    SystemRequirements: \tab jags (>= 3.2.0)\cr
+    Depends: \tab R (>= 3.2.0), rjags, coda, methods, lme4, stats4, MASS, SuppDists, HyperbolicDist\cr
+    SystemRequirements: \tab jags (>= 4.1.0)\cr
     License: \tab GPL (>= 2)\cr
     LazyLoad: \tab yes\cr
 }
@@ -65,4 +65,3 @@ JAGS can be downloaded from \url{http://sourceforge.net/projects/mcmc-jags/}
 }
 
 \keyword{package}
-
