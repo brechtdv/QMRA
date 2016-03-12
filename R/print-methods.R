@@ -1,6 +1,6 @@
 ## Print JAGS model
 print.JAGS_model <-
-function(x, ...){
+function(x, ...) {
   l <- length(x)
   spacer <- 0
   for (i in seq(l)){

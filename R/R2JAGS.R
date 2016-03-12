@@ -1,5 +1,5 @@
 R2JAGS <-
-function(model, data, nchains, inits, burnin, nodes, update, verbose){
+function(model, data, nchains, inits, burnin, nodes, update, verbose) {
   ## disable JAGS progress bars
   if (!verbose) {  
     old.pb <- options("jags.pb")
