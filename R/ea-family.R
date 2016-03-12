@@ -2,24 +2,25 @@
 
 ## Poisson -----------------------------------------------------------------
 poisson <-
-function(x, q){
+function(x, q) {
   ## minus log likelihood function (concentration)
   minloglik <-
-    function(mu, x, q){
-      lik <- (mu * q) ^ x * exp(-mu * q) / factorial(x)
-      return(-sum(log(lik)))
+    function(mu, x, q) {
+      lambda <- mu * q
+      lik <- dpois(x, lambda)
+      -sum(log(lik))
     }
 
   ## minus log likelihood function (presence/absence)
   minloglik_bernoulli <-
-    function(mu, x, q){
+    function(mu, x, q) {
       lik <- (1 - exp(-mu * q)) ^ x * (exp(-mu * q)) ^ (1 - x)
-      return(-sum(log(lik)))
+      -sum(log(lik))
     }
 
   ## summarizing function
   summarize <-
-    function(mu){
+    function(mu) {
       mean <- mu
       return(data.frame(mean = mean, sd = 0,
                         check.names = FALSE, row.names = ""))
@@ -27,7 +28,7 @@ function(x, q){
 
   ## simulation function
   sim <-
-    function(mu, n){
+    function(mu, n) {
       return(rep(mu, n))
     }
 
@@ -58,20 +59,18 @@ function(x, q){
 
 ## Negative Binomial -------------------------------------------------------
 negbin <-
-function(x, q){
+function(x, q) {
   ## minus log likelihood function
   minloglik <-
-    function(mu, k, x, q){
-      lik <-
-        (base::gamma(x + k) / (base::gamma(k) * factorial(x))) *
-        ((mu * q / (k + mu * q)) ^ x) *
-        (((k + mu * q) / k) ^ (-k))
-      return(-sum(log(lik)))
+    function(mu, k, x, q) {
+      mu_nb <- mu * q
+      lik <- dnbinom(x, size = k, mu = mu_nb)
+      -sum(log(lik))
     }
 
   ## summarizing function
   summarize <-
-    function(mu, k){
+    function(mu, k) {
       gamma_shape <- k
       gamma_rate  <- k / mu
       mean <- mu
@@ -84,7 +83,7 @@ function(x, q){
 
   ## simulation function
   sim <-
-    function(mu, k, n){
+    function(mu, k, n) {
       return(rgamma(n, shape = k, rate = k / mu))
     }
 
@@ -113,7 +112,7 @@ function(x, q){
 
 ## Poisson-Log Normal ------------------------------------------------------
 poislognorm <-
-function(x, q){
+function(x, q) {
   ## summarizing function
   summarize <- lognormal()$summarize
 
@@ -144,7 +143,7 @@ function(x, q){
 
 ## Poisson-Weibull ---------------------------------------------------------
 poisweibull <-
-function(x, q){
+function(x, q) {
   ## summarizing function
   summarize <- weibull()$summarize
 
@@ -175,10 +174,10 @@ function(x, q){
 
 ## Poisson-Inverse Gaussian ------------------------------------------------
 poisinvgauss <-
-function(x, q){
+function(x, q) {
   ## minus log likelihood function
   minloglik <-
-    function(mu, shape, x, q){
+    function(mu, shape, x, q) {
       lik <-
         (exp(shape) / factorial(x)) *
         ((mu * q) ^ x) *
@@ -186,7 +185,7 @@ function(x, q){
         ((shape / (shape + 2 * mu * q)) ^ (x / 2)) *
         besselK(x = sqrt(shape * (shape + 2 * mu * q)), nu = x - 1 / 2) *
         sqrt(2 / pi)
-      return(-sum(log(lik)))
+      -sum(log(lik))
     }
 
   ## summarizing function
@@ -216,21 +215,21 @@ function(x, q){
 
 ## Poisson-Generalized Inverse Gaussian ------------------------------------
 poisgeninvgauss <-
-function(x, q){
+function(x, q) {
   ## minus log likelihood function
   minloglik <-
-    function(eta, omega, lambda, x, q){
+    function(eta, omega, lambda, x, q) {
       lik <-
         (((eta * q) ^ x) / factorial(x)) *
         ((omega / (omega + 2 * eta * q)) ^ ((x + lambda) / 2)) *
         besselK(x = sqrt(omega * (omega + 2 * eta * q)), nu = lambda + x) /
         besselK(x = omega, nu = lambda)
-      return(-sum(log(lik)))
+      -sum(log(lik))
     }
 
   ## summarizing function
   summarize <-
-    function(eta, omega, lambda){
+    function(eta, omega, lambda) {
       Theta <- gigChangePars(4, 1, c(lambda, omega, eta))
       a <- Theta[3]
       b <- Theta[2]
@@ -248,7 +247,7 @@ function(x, q){
 
   ## simulation function
   sim <-
-    function(eta, omega, lambda, n){
+    function(eta, omega, lambda, n) {
       return(rgig(n, gigChangePars(4, 1, c(lambda, omega, eta))))
     }
 
@@ -273,18 +272,18 @@ function(x, q){
 
 ## Gamma -------------------------------------------------------------------
 gamma <-
-function(x, d){
+function(x, d) {
   ## minus log likelihood function
   minloglik <-
-    function(shape, rate, x, d){
+    function(shape, rate, x, d) {
       d1 <- pgamma(x[d == 1], shape = shape, rate = rate)  # cens
       d0 <- dgamma(x[d == 0], shape = shape, rate = rate)  # obs
-      return(sum(-log(d1)) + sum(-log(d0)))
+      sum(-log(d1)) + sum(-log(d0))
     }
 
   ## summarizing function
   summarize <-
-    function(shape, rate){
+    function(shape, rate) {
       mean <- shape / rate
       sdev <- sqrt(shape) / rate
       cnfi <- qgamma(c(0.025, 0.975), shape, rate)
@@ -295,7 +294,7 @@ function(x, d){
 
   ## simulation function
   sim <-
-    function(shape, rate, n){
+    function(shape, rate, n) {
       return(rgamma(n, shape, rate))
     }
 
@@ -327,18 +326,18 @@ function(x, d){
 
 ## Weibull -----------------------------------------------------------------
 weibull <-
-function(x, d){
+function(x, d) {
   ## minus log likelihood function
   minloglik <-
-    function(shape, scale, x, d){
+    function(shape, scale, x, d) {
       d1 <- pweibull(x[d == 1], shape = shape, scale = scale)  # cens
       d0 <- dweibull(x[d == 0], shape = shape, scale = scale)  # obs
-      return(sum(-log(d1)) + sum(-log(d0)))
+      sum(-log(d1)) + sum(-log(d0))
     }
 
   ## summarizing function
   summarize <-
-    function(shape, scale){
+    function(shape, scale) {
       mean <- scale * base::gamma(1 + 1/shape)
       sdev <- scale * sqrt(base::gamma(1 + 2/shape) -
                            base::gamma(1 + 1/shape)^2)
@@ -350,7 +349,7 @@ function(x, d){
 
   ## simulation function
   sim <-
-    function(shape, scale, n){
+    function(shape, scale, n) {
       return(rweibull(n, shape, scale))
     }
 
@@ -382,18 +381,18 @@ function(x, d){
 
 ## Log-Normal --------------------------------------------------------------
 lognorm <-
-function(x = 1, d){
+function(x = 1, d) {
   ## minus log likelihood function
   minloglik <-
-    function(mu_log, sd_log, x, d){
+    function(mu_log, sd_log, x, d) {
       d1 <- plnorm(x[d == 1], meanlog = mu_log, sdlog = sd_log)  # cens
       d0 <- dlnorm(x[d == 0], meanlog = mu_log, sdlog = sd_log)  # obs
-      return(sum(-log(d1)) + sum(-log(d0)))
+      sum(-log(d1)) + sum(-log(d0))
     }
 
   ## summarizing function
   summarize <-
-    function(mu_log, sd_log){
+    function(mu_log, sd_log) {
       mean <- exp(mu_log + sd_log^2 / 2)
       sdev <- sqrt((exp(sd_log^2) - 1) * exp(2 * mu_log + sd_log^2))
       cnfi <- qlnorm(c(0.025, 0.975), mu_log, sd_log)
@@ -404,7 +403,7 @@ function(x = 1, d){
 
   ## simulation function
   sim <-
-    function(mu_log, sd_log, n){
+    function(mu_log, sd_log, n) {
       return(rlnorm(n, mu_log, sd_log))
     }
 
@@ -436,10 +435,10 @@ function(x = 1, d){
 
 ## Inverse Gaussian ---------------------------------------------------------
 invgauss <-
-function(x, d){
+function(x, d) {
   ## minus log likelihood function
   minloglik <-
-    function(mu, shape, x, d){
+    function(mu, shape, x, d) {
       y1 <- x[d == 1]  # cens
       d1 <- pnorm(((y1 / mu) - 1) * sqrt(mu * shape / y1)) +
             exp(2 * shape) *
@@ -447,12 +446,12 @@ function(x, d){
       y0 <- x[d == 0]  # obs
       d0 <- sqrt(mu * shape / (2 * pi * y0 ^ 3)) *
             exp(shape * (1 - 0.5 * ((y0 / mu) + (mu / y0))))
-      return(sum(-log(d1)) + sum(-log(d0)))
+      sum(-log(d1)) + sum(-log(d0))
     }
 
   ## summarizing function
   summarize <-
-    function(mu, shape){
+    function(mu, shape) {
       mean <- mu
       sdev <- sqrt(mu^3 / shape)
       cnfi <- qinvGauss(c(0.025, 0.975), mu, shape)
@@ -463,7 +462,7 @@ function(x, d){
 
   ## simulation function
   sim <-
-    function(mu, shape, n){
+    function(mu, shape, n) {
       return(rinvGauss(n, mu, shape))
     }
 
