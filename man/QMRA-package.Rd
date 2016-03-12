@@ -13,14 +13,15 @@ The \pkg{QMRA} package provides a suite of functions for performing exposure ass
 \details{
   \tabular{ll}{
     Package: \tab QMRA\cr
-    Type: \tab Package\cr
-    Version: \tab 0.0.13\cr
-    Date: \tab 2016-03-03\cr
-    Authors: \tab Brecht Devleesschauwer, Niko Speybroeck, Christel Faes\cr
+    Version: \tab 0.0.14\cr
+    Date: \tab 2016-03-12\cr
+    Authors: \tab Brecht Devleesschauwer, Christel Faes, Arie Havelaar, Niko Speybroeck\cr
     Maintainer: \tab \email{brechtdv@gmail.com}\cr
+    URL: \tab \url{https://github.com/brechtdv/QMRA}\cr
     BugReports: \tab \url{https://github.com/brechtdv/QMRA/issues}\cr
-    Depends: \tab R (>= 3.2.0), rjags, coda, methods, lme4, stats4, MASS, SuppDists, HyperbolicDist\cr
-    SystemRequirements: \tab jags (>= 4.1.0)\cr
+    Depends: \tab R (>= 3.2.0)\cr
+    Imports: \tab methods, rjags, lme4, stats4, MASS, SuppDists, HyperbolicDist\cr
+    SystemRequirements: \tab JAGS (>= 4.1.0) (see http://mcmc-jags.sourceforge.net)\cr
     License: \tab GPL (>= 2)\cr
     LazyLoad: \tab yes\cr
 }

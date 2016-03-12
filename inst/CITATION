@@ -4,11 +4,12 @@ citEntry(
   entry = "manual",
   author = c(person("Brecht", "Devleesschauwer",
              role = c("aut", "cre"), email = "brechtdv@gmail.com"),
-             person("Niko", "Speybroeck", role = "aut"),
-             person("Christel", "Faes", role = "aut")),
+             person("Christel", "Faes", role = "aut"),
+             person("Arie", "Havelaar", role = "aut"),
+             person("Niko", "Speybroeck", role = "aut")),
   title = "QMRA: Quantitative Microbial Risk Assessment.",
   year = "2016",
-  note = "R package version 0.0.13",
+  note = "R package version 0.0.14",
   url = "https://github.com/brechtdv/QMRA",
-  textVersion = "Brecht Devleesschauwer, Niko Speybroeck and Christel Faes (2016). QMRA: Quantitative Microbial Risk Assessment. R package version 0.0.13. https://github.com/brechtdv/QMRA"
+  textVersion = "Brecht Devleesschauwer, Christel Faes, Arie Havelaar and Niko Speybroeck (2016). QMRA: Quantitative Microbial Risk Assessment. R package version 0.0.14. https://github.com/brechtdv/QMRA"
 )

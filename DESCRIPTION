@@ -1,20 +1,22 @@
 Package: QMRA
-Type: Package
 Title: Parametric Models for Quantitative Microbial Risk Assessment
-Version: 0.0.13
-Date: 2016-03-03
+Version: 0.0.14
+Date: 2016-03-12
 Authors@R: c(person("Brecht", "Devleesschauwer",
              role = c("aut", "cre"), email = "brechtdv@gmail.com"),
-             person("Niko", "Speybroeck", role = "aut"),
-             person("Christel", "Faes", role = "aut"))
+             person("Christel", "Faes", role = "aut"),
+             person("Arie", "Havelaar", role = "aut"),
+             person("Niko", "Speybroeck", role = "aut"))
 Author: Brecht Devleesschauwer [aut, cre],
-        Niko Speybroeck [aut],
-        Christel Faes [aut]
+        Christel Faes [aut],
+        Arie Havelaar [aut],
+        Niko Speybroeck [aut]
 Maintainer: Brecht Devleesschauwer <brechtdv@gmail.com>
-BugReports: https://github.com/brechtdv/QMRA/issues
 Description: The QMRA package provides a suite of functions for performing exposure assessment, dose-response assessment and risk characterisation in the context of microbial risk assessment. Different parametric models are available and can be fitted in both a maximum likelihood and Bayesian framework. IMPORTANT: the Bayesian methods in the QMRA package call on JAGS (Just Another Gibbs Sampler), which therefore has to be available on the user's system. JAGS can be downloaded from http://mcmc-jags.sourceforge.net/
-Depends: R (>= 3.2.0), rjags, coda, methods, lme4, stats4
-Imports: MASS, SuppDists, HyperbolicDist
-SystemRequirements: jags (>= 4.1.0)
+URL: https://github.com/brechtdv/QMRA
+BugReports: https://github.com/brechtdv/QMRA/issues
+Depends: R (>= 3.2.0)
+Imports: methods, rjags, lme4, stats4, MASS, SuppDists, HyperbolicDist
+SystemRequirements: JAGS (>= 4.1.0) (see http://mcmc-jags.sourceforge.net)
 License: GPL (>= 2)
 LazyData: yes
