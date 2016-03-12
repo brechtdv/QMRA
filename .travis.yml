@@ -1,8 +1,8 @@
-# .travis.yml for R projects
+# Sample .travis.yml for R projects
 
 language: r
-sudo: false
-cache: packages
+warnings_are_errors: true
+sudo: required
 
 r_binary_packages:
   - rjags
