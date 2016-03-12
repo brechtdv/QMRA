@@ -91,7 +91,8 @@ function(x, d, data,
          model = c("gamma", "g",
                    "lognorm", "ln",
                    "weibull", "w",
-                   "invgauss", "ig"), ...){
+                   "invgauss", "ig"),
+         start = NULL, ...){
 
   ## check data
   if (missing(data) || is.null(data)){
@@ -154,7 +155,7 @@ function(x, d, data,
 ## PRESENCE/ABSENCE DATA ---------------------------------------------------
 ea_presence <-
 function(x, q = 1, replicates = rep(1, length(x)), data,
-         model = c("poisson", "p"), ...){
+         model = c("poisson", "p"), start = NULL, ...){
 
   ## check data
   if (missing(data) || is.null(data)){
