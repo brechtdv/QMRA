@@ -6,3 +6,4 @@ sudo: required
 
 r_binary_packages:
   - rjags
+  - lme4
